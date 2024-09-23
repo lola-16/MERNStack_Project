@@ -1,0 +1,28 @@
+.footer {
+  background-color: #f8f9fa;
+  padding: 8px 0;
+  font-family: 'Cairo', sans-serif;
+}
+
+.footer ul {
+  list-style: none;
+  padding: 0px;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding: 10px 0;
+  background-color: #e9ecef;
+  font-size: 16px;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .footer {
+    text-align: center;
+  }
+
+  .footer ul {
+    padding-left: 0;
+  }
+}

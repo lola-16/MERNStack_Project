@@ -1,0 +1,77 @@
+.header {
+  font-family: 'Cairo', sans-serif;
+}
+
+/* Top bar styling */
+.top-bar {
+  background-color: #ffebcc;
+  text-align: center;
+  padding: 5px 0;
+  font-size: 14px;
+  color: #d9534f;
+}
+
+/* Navbar styling */
+.navbar {
+  background-color: #6a1b9a; 
+  padding: 10px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.navbar-logo img {
+  height: 50px;
+}
+
+/* Navigation links with dropdown arrows */
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-dropdown {
+  color: white;
+}
+
+.nav-links .nav-link {
+  color: white;
+  font-size: 18px;
+}
+
+.nav-links .dropdown-toggle::after {
+  margin-left: 5px;
+}
+
+.nav-icons {
+  display: flex;
+  gap: 15px;
+  font-size: 18px;
+  color: #fff; 
+}
+
+.nav-icons i {
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.nav-icons i:hover {
+  transform: scale(1.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .nav-links {
+    flex-direction: column;
+    align-items: center;
+    padding-top: 10px;
+  }
+
+  .nav-icons {
+    margin-top: 10px;
+    justify-content: center;
+  }
+
+  .navbar-logo img {
+    height: 40px;
+  }
+}
