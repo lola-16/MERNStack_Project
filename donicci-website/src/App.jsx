@@ -6,7 +6,8 @@ import HomePage from './Pages/HomePage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import MenShoe from './Pages/MenShoe';
 import ProductDetails from './Pages/ProductDetails';
-
+import Account from './Pages/Account';
+import OrderedForm from './Pages/OrderedForm';
 /* eslint-disable*/
 function App() {
   return (
@@ -17,6 +18,8 @@ function App() {
           <Route path="/" element={<HomePage />} /> 
           <Route path='/menShoe' element={<MenShoe />} />
           <Route path='/menshoe/ProductDetails' element={<ProductDetails />} />
+          <Route path='/Account' element={<Account />} />
+          <Route path='/Account/OrderedForm' element={<OrderedForm />} />
         </Routes>
         <Footer />
       </div>
