@@ -1,0 +1,62 @@
+body, html {
+    height: 100%;
+    font-family: "SUSE", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+.grid {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.card {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 10px;
+}
+.dropdown-center {
+    margin-left: 20px; 
+}
+
+.dropdown-center .dropdown-menu, 
+.dropdown-center .btn {
+    width: 250px; 
+}
+.card {
+    width: 18rem; 
+    height: 30rem; 
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 10px;
+    overflow: hidden; 
+}
+
+.card img {
+    height: 12rem; 
+    object-fit: cover; 
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%; 
+    width: 100%;
+}
+
+.card-text {
+    margin-bottom: 1rem;
+    flex-grow: 1; 
+}
+.btn{
+    padding: 10px;
+    background-color: rgb(192, 96, 255);
+    border: none;
+    color: rgb(255, 255, 255);
+}
+.btn:hover{
+    background-color: rgb(255, 161, 236);
+}

@@ -1,6 +1,6 @@
 import React from 'react';
 import './HomePage.css';
-
+import OffersSection from '../components/OffersSection';
 const HomePage = () => {
   return (
     <section className="home-page">
@@ -42,6 +42,8 @@ const HomePage = () => {
           </div>
         </div>
       </div>
+      
+      <OffersSection />
     </section>
   );
 };

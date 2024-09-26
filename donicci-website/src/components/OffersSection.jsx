@@ -10,7 +10,6 @@ const OffersSection = () => {
         <div className="row">
           <div className="col-12 col-md-6 col-lg-4 col-xl-3">
             <div className="offer-card">Offer 1
-             
             </div>
           </div>
           <div className="col-12 col-md-6 col-lg-4 col-xl-3">
@@ -25,8 +24,6 @@ const OffersSection = () => {
           <div className="col-12 col-md-6 col-lg-4 col-xl-3">
             <div className="offer-card">Offer 5</div>
           </div>
-          
-         
         </div>
       </div>
     </section>

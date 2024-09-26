@@ -1,6 +1,7 @@
 import React from 'react';
 import './Header.css';
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   return (
@@ -17,7 +18,9 @@ const Header = () => {
           <Navbar.Collapse id="navbar-nav" className="justify-content-center">
             <Nav className="nav-links">
               <NavDropdown title="رجالي" id="men-dropdown">
-                <NavDropdown.Item href="#men1">أحذية رجالي</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/menShoe">
+                  أحذية رجالي
+                </NavDropdown.Item>
                 <NavDropdown.Item href="#men2">جوارب رجالي</NavDropdown.Item>
               </NavDropdown>
               <NavDropdown title="حريمي" id="women-dropdown">
