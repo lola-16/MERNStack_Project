@@ -8,6 +8,10 @@ import MenShoe from './Pages/MenShoe';
 import ProductDetails from './Pages/ProductDetails';
 import Account from './Pages/Account';
 import OrderedForm from './Pages/OrderedForm';
+import ManSocks from './Pages/ManSocks';
+import WomenSocks from './Pages/WomenSocks';
+import ChildSocks from './Pages/ChildSocks';
+import Login from './Pages/Login';
 /* eslint-disable*/
 function App() {
   return (
@@ -15,6 +19,10 @@ function App() {
       <div className="App">
         <Header />
         <Routes>
+          <Route path='/Login' element={<Login/>}/>
+          <Route path='/ChildSocks' element={<ChildSocks/>}/>
+          <Route path='/WomenSocks' element={<WomenSocks/>}/>
+          <Route path='/ManSocks' element={<ManSocks/>}/>
           <Route path="/" element={<HomePage />} /> 
           <Route path='/menShoe' element={<MenShoe />} />
           <Route path='/menshoe/ProductDetails' element={<ProductDetails />} />

@@ -21,15 +21,19 @@ const Header = () => {
                 <NavDropdown.Item as={Link} to="/menShoe">
                   أحذية رجالي
                 </NavDropdown.Item>
-                <NavDropdown.Item href="#men2">جوارب رجالي</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/ManSocks">
+                  جوارب رجالي
+                </NavDropdown.Item>
               </NavDropdown>
               <NavDropdown title="حريمي" id="women-dropdown">
-                <NavDropdown.Item href="#women1">أحذية حريمي</NavDropdown.Item>
-                <NavDropdown.Item href="#women2">جوارب حريمي</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/WomenSocks">
+                  جوارب حريمي
+                </NavDropdown.Item>
               </NavDropdown>
               <NavDropdown title="اطفال" id="kids-dropdown">
-                <NavDropdown.Item href="#kids1">أحذية أطفال</NavDropdown.Item>
-                <NavDropdown.Item href="#kids2">جوارب أطفال</NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/ChildSocks">
+                  جوارب اطفال
+                </NavDropdown.Item>
               </NavDropdown>
               <NavDropdown title="العروض" id="offers-dropdown">
                 <NavDropdown.Item href="#offer1">عرض 1</NavDropdown.Item>
