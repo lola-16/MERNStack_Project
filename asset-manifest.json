@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/e-commerce-/static/css/main.ba51d7d9.css",
-    "main.js": "/e-commerce-/static/js/main.71431e95.js",
-    "index.html": "/e-commerce-/index.html",
-    "main.ba51d7d9.css.map": "/e-commerce-/static/css/main.ba51d7d9.css.map",
-    "main.71431e95.js.map": "/e-commerce-/static/js/main.71431e95.js.map"
+    "main.css": "/MERNStack_Project/static/css/main.ba51d7d9.css",
+    "main.js": "/MERNStack_Project/static/js/main.71431e95.js",
+    "index.html": "/MERNStack_Project/index.html",
+    "main.ba51d7d9.css.map": "/MERNStack_Project/static/css/main.ba51d7d9.css.map",
+    "main.71431e95.js.map": "/MERNStack_Project/static/js/main.71431e95.js.map"
   },
   "entrypoints": [
     "static/css/main.ba51d7d9.css",
