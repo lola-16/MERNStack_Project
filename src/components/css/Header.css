@@ -94,3 +94,21 @@
     text-align: left;
   }
 }
+.btn_order{
+  color: #fff!important;
+   background-color: #ce6bec!important;
+}
+.productname{
+  color:#ce6bec;
+  text-decoration: underline;
+}
+.btn_exit{
+  width: 25px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ce6bec!important;
+  border-radius: 50%;
+  border:0 ;
+}
