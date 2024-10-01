@@ -100,7 +100,7 @@ const Header = () => {
                 <span>40.00 جنيه</span>
               </div>
               <div className="w-100">
-                <button className="btn w-100 btn_order"> اتمام الطلب</button>
+                <Link to="/OrderedForm" className="btn w-100 btn_order"> اتمام الطلب</Link>
               </div>
               <div className="text-center my-3 ">
                 <Link to="/" class="text-dark"> تابع التسوق</Link>

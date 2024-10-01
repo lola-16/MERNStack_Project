@@ -1,27 +1,18 @@
 const mongoose = require('mongoose');
-const AutoIncreOrderSchemat = require('mongoose-sequence')(mongoose);
-const Category = require('./Category');  
-const OrderSchema = new mongoose.Schema({
-    name:String,
-    government: String,
-    area: String,
-    address: String,
-    image: String,
-    phone: Number,
-    notes: String,
-    cupone:String,
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 
-
-    CategoryId: { type: Number, ref: 'Category' }, 
-}, { _id: false });
-
-OrderSchema.add({ _id: { type: Number } });
-OrderSchema.plugin(AutoIncreOrderSchemat, { 
-    inc_field: '_id', 
-    start_seq: 1,
-    id: 'Order_id'
+const orderSchema = new mongoose.Schema({
+    orderId: { type: Number, unique: true },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    products: [{ 
+        product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+        quantity: { type: Number, required: true }
+    }],
+    totalAmount: { type: Number, required: true },
+    orderDate: { type: Date, default: Date.now }
 });
 
-const Order = mongoose.model('Order', OrderSchema);
+orderSchema.plugin(AutoIncrement, { inc_field: 'orderId', start_seq: 1 });
 
+const Order = mongoose.model('Order', orderSchema);
 module.exports = Order;

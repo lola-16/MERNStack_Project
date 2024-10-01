@@ -9,7 +9,7 @@ export default function FavPage() {
                         <div className="col-md-6 col-lg-3">
                             <div className="d-flex gap-1 align-items-center  gap-3 mb-3">
                                 <button type="button" className=" btn_exit p-1" aria-label="Close">x </button>
-                               <a href='#'> <img src='./images/SocksLeft.jpeg'  alt="" title="" style={{ width:"90px", height:"90px" , borderRadius:"0"}}   /></a>
+                                <a href='#'> <img src='./images/SocksLeft.jpeg' alt="" title="" style={{ width: "90px", height: "90px", borderRadius: "0" }} /></a>
                             </div>
                         </div>
                         <div className="col-md-6 col-lg-3">
