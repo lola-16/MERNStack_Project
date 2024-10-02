@@ -8,7 +8,7 @@ export default function ShoeCard(props) {
         <Col xs={12} md={4} className="mb-4 d-flex justify-content-center align-items-center">
                 <Card>
                     <p className="discount-label">وفر 30%</p>
-                    <Card.Img variant="top" src="./images/image.jpeg" alt={props.name} className="shoe-image" />
+                    <Card.Img variant="top" src={props.image} alt={props.name} className="shoe-image" />
                     <CiHeart className='heart'/>
                     <Card.Body>
                         <Card.Title>{props.name}</Card.Title>

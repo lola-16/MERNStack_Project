@@ -1,3 +1,4 @@
+// server.js
 const express = require('express');
 const mongoose = require('mongoose');
 const userRoutes = require('./routes/userRoutes');
@@ -10,8 +11,12 @@ const cors = require('cors');
 const authenticateToken = require('./middlewares/authMiddleware');
 const notFoundHandler = require('./middlewares/notFoundMiddleware');
 const errorHandler = require('./middlewares/errorMiddleware');
+const path = require('path'); 
 require('dotenv').config();
+
 const app = express();
+
+// CORS Configuration
 const corsOptions = {
     origin: 'http://localhost:3000', 
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -19,13 +24,12 @@ const corsOptions = {
     credentials: true, 
 };
 app.use(cors(corsOptions));
+
+// Middleware to parse JSON
 app.use(express.json());
 
-mongoose.connect('mongodb+srv://Donicci:MERN@cluster0.zctmmxm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
-.then(() => {
-    console.log('Connected to MongoDB');
-    app.listen(8080, () => console.log('Server running on port 8080'));
-}).catch(err => console.error('MongoDB connection error:', err));
+// Serve static files from 'uploads' directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Use all routes
 app.use('/api', userRoutes);
@@ -34,8 +38,19 @@ app.use('/api', categoryRoutes);
 app.use('/api', orderRoutes);
 app.use('/api', reviewRoutes);
 app.use('/api', cartRoutes);
-
+// app.use('/api',offerroutes);
 // Use authentication middleware
 app.use(authenticateToken);
 app.use(notFoundHandler);
 app.use(errorHandler);
+
+// MongoDB Connection
+mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://Donicci:MERN@cluster0.zctmmxm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+.then(() => {
+    console.log('Connected to MongoDB');
+    app.listen(8080, () => console.log('Server running on port 8080'));
+})
+.catch(err => console.error('MongoDB connection error:', err));

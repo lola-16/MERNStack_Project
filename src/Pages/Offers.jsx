@@ -22,7 +22,7 @@ export default function Offers() {
                 </div>
                 <div className="row" id="product-list">
                     {manSocks.map((sock, index) => (
-                        <SocksCard key={index} name={sock.name} deletedPrice={sock.deletedPrice} currentPrice={sock.currentPrice} />
+                        <SocksCard key={index} name={sock.name} deletedPrice={sock.deletedPrice} currentPrice={sock.price} />
                     ))}
                 </div>
             </div>

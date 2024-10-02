@@ -1,3 +1,5 @@
+// src/App.js
+
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
@@ -8,9 +10,6 @@ import MenShoe from './Pages/MenShoe';
 import ProductDetails from './Pages/ProductDetails';
 import Account from './Pages/Account';
 import OrderedForm from './Pages/OrderedForm';
-import ManSocks from './Pages/ManSocks';
-import WomenSocks from './Pages/WomenSocks';
-import ChildSocks from './Pages/ChildSocks';
 import Login from './Pages/Login';
 import Offers from './Pages/Offers';
 import Register from './Pages/Register';
@@ -19,6 +18,7 @@ import Cart from './Pages/Cart';
 import Adress from './Pages/Adress';
 import AccountDetails from './Pages/AccountDetails';
 import Orders from './Pages/Orders';
+import CategoryPage from './Pages/CategoryPage'; // Import the new CategoryPage component
 
 /* eslint-disable*/
 function App() {
@@ -27,22 +27,23 @@ function App() {
       <div className="App">
         <Header />
         <Routes>
-        <Route path='/Account/Orders' element={<Orders/>} />
-        <Route path='/Account/AccountDetails' element={<AccountDetails />} />
-        <Route path='/Account/Address' element={<Adress />} />
-        <Route path='/Cart' element={<Cart />} />
-          <Route path='/Fav' element={<FavPage />} />
-          <Route path='/Register' element={<Register />} />
-          <Route path='/Login' element={<Login />} />
-          <Route path='/ChildSocks' element={<ChildSocks />} />
-          <Route path='/WomenSocks' element={<WomenSocks />} />
-          <Route path='/ManSocks' element={<ManSocks />} />
+          {/* Dynamic Route for Categories */}
+          <Route path="/category/:categoryNumber" element={<CategoryPage />} />
+          
+          {/* Other Routes */}
+          <Route path="/Account/Orders" element={<Orders />} />
+          <Route path="/Account/AccountDetails" element={<AccountDetails />} />
+          <Route path="/Account/Address" element={<Adress />} />
+          <Route path="/Cart" element={<Cart />} />
+          <Route path="/Fav" element={<FavPage />} />
+          <Route path="/Register" element={<Register />} />
+          <Route path="/Login" element={<Login />} />
           <Route path="/" element={<HomePage />} />
-          <Route path='/menShoe' element={<MenShoe />} />
-          <Route path='/menshoe/ProductDetails' element={<ProductDetails />} />
-          <Route path='/Account' element={<Account />} />
-          <Route path='/Offers' element={<Offers />} />
-          <Route path='/OrderedForm' element={<OrderedForm />} />
+          <Route path="/menShoe" element={<MenShoe />} />
+          <Route path="/menshoe/ProductDetails" element={<ProductDetails />} />
+          <Route path="/Account" element={<Account />} />
+          <Route path="/Offers" element={<Offers />} />
+          <Route path="/OrderedForm" element={<OrderedForm />} />
         </Routes>
         <Footer />
       </div>

@@ -25,8 +25,8 @@ const HomePage = () => {
           <div className="centered-box">
             <p>جواربنا المميزة مصنوعة من مواد عالية الجودة توفر أقصى درجات الراحة والمتانة.</p>
             <div className="Links">
-              <Link className=" btn-custom" to="/WomenSocks">شراب حريمي</Link>
-              <Link className=" btn-custom" to="/ManSocks">شراب رجالي</Link>
+              <Link className=" btn-custom" to="/category/3">شراب حريمي</Link>
+              <Link className=" btn-custom" to="/category/">شراب رجالي</Link>
             </div>
           </div>
         </div>
@@ -49,7 +49,7 @@ const HomePage = () => {
       <Container fluid className='mt-3'>
         <h1 className='head'>
           <span className='highlight' >رجالي !!</span>
-          <Link className='more-btn' to="/ManSocks">
+          <Link className='more-btn' to="/category/2">
             عرض المزيد
           </Link>
         </h1>
@@ -62,7 +62,7 @@ const HomePage = () => {
       <Container fluid className='mt-3'>
         <h1 className='head'>
           <span className='highlight' > حريمي!!</span>
-          <Link className='more-btn' to="/WomenSoks">
+          <Link className='more-btn' to="/category/3">
             عرض المزيد
           </Link>
         </h1>

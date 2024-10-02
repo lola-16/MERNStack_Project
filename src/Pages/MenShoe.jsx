@@ -2,14 +2,15 @@ import React from 'react';
 import { Container, Row } from 'react-bootstrap';
 import './Css/MenShoe.css';
 import ShoeCard from '../components/ShoeCard';
-
+import axios from 'axios';
 export default function MenShoe() {
-    const shoes = [
-        { name: 'كود 1B غامق', deletedPrice: 50, currentPrice: 35 },
-        { name: 'كود 2B فاتح', deletedPrice: 45, currentPrice: 30 },
-        { name: 'كود 3A أسود', deletedPrice: 60, currentPrice: 40 },
-    ];
-
+    const [shoes, setShoes] = React.useState([]);
+    React.useEffect(() => {
+        axios.get('http://localhost:8080/api/products/category/15')
+            .then(response => setShoes(response.data))
+            .catch(error => console.error(error));
+    }, []);
+    
     return (
         <>
             <div>
@@ -33,11 +34,11 @@ export default function MenShoe() {
             <Container className="h-100">
                 <Row className="text-center g-4">
                     {shoes.map((shoe, index) => (
-                        <ShoeCard 
-                            key={index} 
-                            name={shoe.name} 
-                            deletedPrice={shoe.deletedPrice} 
-                            currentPrice={shoe.currentPrice} 
+                        <ShoeCard
+                            key={index}
+                            name={shoe.name}
+                            currentPrice={shoe.price}
+                            image={shoe.image}
                         />
                     ))}
                 </Row>

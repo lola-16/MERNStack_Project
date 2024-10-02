@@ -1,26 +1,25 @@
-import React from 'react'
-import { Card, Col } from 'react-bootstrap'
-import { CiHeart } from 'react-icons/ci'
-import './css/Card.css'; 
+import React from 'react';
+import { Card} from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
-export default function SocksCard(props) {
+const SocksCard = ({ name, deletedPrice, currentPrice, image, _id }) => {
     return (
-        <Col xs={12} md={4} className="mb-4 d-flex justify-content-center align-items-center">
-            <Card>
-                <p className="discount-label">وفر 30%</p>
-                <Card.Img variant="top" src="./images/image.jpeg" alt={props.name} className="shoe-image" />
-                <CiHeart className='heart' />
-                <Card.Body>
-                    <Card.Title>{props.name}</Card.Title>
-                    <Card.Text className='textcard'>
-                        <span className="deleted-price">{props.deletedPrice} جنيها</span>
-                        <strong className="current-price"> {props.currentPrice} جنيها</strong>
+        <div className="col-md-4 mb-4">
+            <Card className="h-100">
+                <Card.Img variant="top" src={image} alt={name} />
+                <Card.Body className="d-flex flex-column">
+                    <Card.Title>{name}</Card.Title>
+                    <Card.Text>
+                        {deletedPrice && (
+                            <span className="text-muted text-decoration-line-through me-2">{deletedPrice} ريال</span>
+                        )}
+                        <span className="fw-bold">{currentPrice} ريال</span>
                     </Card.Text>
-                    <button className="btn-full-width">
-                        اضافة الى السلة
-                    </button>
+                    <Link to={`/products/${_id}`} className="btn btn-primary mt-auto">تفاصيل المنتج</Link>
                 </Card.Body>
             </Card>
-        </Col>
-    )
-}
+        </div>
+    );
+};
+
+export default SocksCard;

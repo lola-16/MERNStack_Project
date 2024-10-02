@@ -17,4 +17,5 @@ router.delete('/categories/:id', categoryController.deleteCategory);
 // Get All Categories
 router.get('/categories', categoryController.getAllCategories);
 
+
 module.exports = router;

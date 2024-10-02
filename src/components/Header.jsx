@@ -18,16 +18,32 @@ const Header = () => {
             <Navbar.Collapse id="navbar-nav" className="justify-content-center">
               <Nav className="nav-links">
                 <NavDropdown title="رجالي" id="men-dropdown">
-                  <NavDropdown.Item as={Link} to="/menShoe">أحذية رجالي </NavDropdown.Item>
-                  <NavDropdown.Item as={Link} to="/ManSocks">جوارب رجالي</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/menShoe">أحذية رجالي</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/category/2">شراب انكل رجالي</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/category/1">شراب طويل رجالي</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/category/6">شراب غير ظاهر رجالي</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/category/5">شراب هاف رجالي</NavDropdown.Item>
                 </NavDropdown>
+
                 <NavDropdown title="حريمي" id="women-dropdown">
-                  <NavDropdown.Item as={Link} to="/WomenSocks">جوارب حريمي</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/category/3">شراب انكل حريمي</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/category/4">شراب طويل حريمي</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/category/7">شراب غير ظاهر حريمي</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/category/8">شراب هاف حريمي</NavDropdown.Item>
                 </NavDropdown>
+
                 <NavDropdown title="اطفال" id="kids-dropdown">
-                  <NavDropdown.Item as={Link} to="/ChildSocks">جوارب اطفال</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/category/9">اطفالي ولادي (من 2 سنة ل 4 سنين)</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/category/10">اطفالي بناتي (من 2 سنة ل 4 سنين)</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/category/12">اطفالي ولادي (من 5 سنين ل 8 سنين)</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/category/11">اطفالي بناتي (من 5 سنين ل 8 سنين)</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/category/13">اطفالي ولادي (من 9 سنين ل 12 سنين)</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/category/14">اطفالي بناتي (من 9 سنين ل 12 سنين)</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/category/all">الجميع</NavDropdown.Item>
                 </NavDropdown>
+
                 <Link to="/Offers" className="offers">العروض</Link>
+                <Link to="/category/all" className="offers">الجميع</Link>
               </Nav>
             </Navbar.Collapse>
             <div className="nav-icons d-flex align-items-center">
@@ -54,7 +70,7 @@ const Header = () => {
               <div className="d-flex  gap-3 mb-2 align-items-center">
                 <div className="d-flex gap-1 align-items-center">
                   <button type="button" className="btn-close" aria-label="Close" />
-                  <img src='./images/SocksLeft.jpeg'  alt="" title="" style={{ width:"90px", height:"90px" , borderRadius:"0"}}   />
+                  <img src='./images/SocksLeft.jpeg' alt="" title="" style={{ width: "90px", height: "90px", borderRadius: "0" }} />
                   <div>
                     <h4>مجموعة 5 شراب انكل(ابيض ورمادى) كود 47</h4>
                     <p>75.00 جنيه</p>
@@ -89,8 +105,8 @@ const Header = () => {
                 <p>احصل على شحن مجاني بعد 350.00 جنيه!
                 </p>
               </div>
-              <div className="progress" style={{  backgroundColor:"#ecd4e5"}} role="progressbar" aria-label="Default striped example" aria-valuenow={10} aria-valuemin={0} aria-valuemax={100}>
-                <div className="progress-bar progress-bar-striped" style={{ width: '10%', backgroundColor:"#95578a"}} />
+              <div className="progress" style={{ backgroundColor: "#ecd4e5" }} role="progressbar" aria-label="Default striped example" aria-valuenow={10} aria-valuemin={0} aria-valuemax={100}>
+                <div className="progress-bar progress-bar-striped" style={{ width: '10%', backgroundColor: "#95578a" }} />
               </div>
               <p class="mt-2">أضف 240.00 جنيه إلى سلة التسوق للحصول على شحن مجاني!
               </p>
