@@ -13,5 +13,5 @@ const offerSchema = new mongoose.Schema({
 
 offerSchema.plugin(AutoIncrement, { inc_field: 'offerId', start_seq: 1 });
 
-const offer = mongoose.model('offer', offerSchema);
-module.exports = offer;
+const Offer = mongoose.model('Offer', offerSchema);
+module.exports = Offer;

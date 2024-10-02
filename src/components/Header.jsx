@@ -39,7 +39,6 @@ const Header = () => {
                   <NavDropdown.Item as={Link} to="/category/11">اطفالي بناتي (من 5 سنين ل 8 سنين)</NavDropdown.Item>
                   <NavDropdown.Item as={Link} to="/category/13">اطفالي ولادي (من 9 سنين ل 12 سنين)</NavDropdown.Item>
                   <NavDropdown.Item as={Link} to="/category/14">اطفالي بناتي (من 9 سنين ل 12 سنين)</NavDropdown.Item>
-                  <NavDropdown.Item as={Link} to="/category/all">الجميع</NavDropdown.Item>
                 </NavDropdown>
 
                 <Link to="/Offers" className="offers">العروض</Link>

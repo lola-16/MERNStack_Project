@@ -8,13 +8,14 @@ img {
     height: 20rem;
 }
 
+
 .cart {
     margin-top: 30px;
 }
 
 .car-btn {
     padding: 10px;
-    background-color: rgb(192, 96, 255);
+    background-color: rgb(85, 49, 109) !important;
     border: none;
     color: rgb(255, 255, 255);
 }
@@ -35,7 +36,7 @@ img {
 .star:hover {
     color: rgb(255, 157, 0);
 }
-.card-datail{
+.card-detail{
     height: 7em;
     display: flex;
     justify-content: center;
@@ -61,4 +62,18 @@ img {
     border-radius: 5px;
     cursor: pointer;
     border: 1px solid blueviolet;
+}
+.img-fluid{
+    width: 100%;
+    height: 70%;
+    border-radius: 30px;
+}
+.ButtonGroup{
+    display: flex;
+    gap: 10px;
+    justify-content: space-evenly;
+}
+
+.cc{
+    background-color: rgb(85, 49, 109) !important;
 }

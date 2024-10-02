@@ -18,7 +18,7 @@ import Cart from './Pages/Cart';
 import Adress from './Pages/Adress';
 import AccountDetails from './Pages/AccountDetails';
 import Orders from './Pages/Orders';
-import CategoryPage from './Pages/CategoryPage'; // Import the new CategoryPage component
+import CategoryPage from './Pages/CategoryPage'; 
 
 /* eslint-disable*/
 function App() {
@@ -40,7 +40,7 @@ function App() {
           <Route path="/Login" element={<Login />} />
           <Route path="/" element={<HomePage />} />
           <Route path="/menShoe" element={<MenShoe />} />
-          <Route path="/menshoe/ProductDetails" element={<ProductDetails />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/Account" element={<Account />} />
           <Route path="/Offers" element={<Offers />} />
           <Route path="/OrderedForm" element={<OrderedForm />} />

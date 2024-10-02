@@ -1,5 +1,6 @@
 .shoe-image {
     position: relative;
+    height: 70%;
 }
 
 .discount-label {
@@ -40,4 +41,12 @@
 .textcard{
     display: flex;
     justify-content: space-evenly;
+}
+.shoecard{
+    height: 100% !important;
+}
+.prices{
+    display: flex;
+    justify-content: space-between;
+    height: 30%;
 }

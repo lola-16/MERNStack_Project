@@ -65,7 +65,8 @@ const CategoryPage = () => {
                 <div className="row" id="product-list">
                     {products.map((sock) => (
                         <SocksCard
-                            key={sock._id}
+                            key={sock._id}           // React's key prop for list rendering
+                            id={sock._id}            // Pass the ID as a separate prop
                             image={sock.image}
                             name={sock.name}
                             deletedPrice={sock.deletedPrice}
