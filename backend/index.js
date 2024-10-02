@@ -7,6 +7,7 @@ const categoryRoutes = require('./routes/categoryRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 const cartRoutes = require('./routes/cartRoutes');
+const offerRoutes = require('./routes/offerRoutes'); 
 const cors = require('cors');
 const authenticateToken = require('./middlewares/authMiddleware');
 const notFoundHandler = require('./middlewares/notFoundMiddleware');
@@ -38,7 +39,8 @@ app.use('/api', categoryRoutes);
 app.use('/api', orderRoutes);
 app.use('/api', reviewRoutes);
 app.use('/api', cartRoutes);
-// app.use('/api',offerroutes);
+app.use('/api', offerRoutes);
+
 // Use authentication middleware
 app.use(authenticateToken);
 app.use(notFoundHandler);
@@ -46,11 +48,12 @@ app.use(errorHandler);
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://Donicci:MERN@cluster0.zctmmxm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+   // useNewUrlParser: true,
+   // useUnifiedTopology: true, 
 })
 .then(() => {
     console.log('Connected to MongoDB');
     app.listen(8080, () => console.log('Server running on port 8080'));
-})
-.catch(err => console.error('MongoDB connection error:', err));
+}) 
+.catch(err => console.error('MongoDB connection error:', err)); 
+  

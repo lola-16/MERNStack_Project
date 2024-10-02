@@ -1,12 +1,21 @@
 import React from 'react'
 import SocksCard from '../components/SocksCard';
-
-export default function Offers() {
-        const manSocks = [
-            { name: 'مجموعة 10 شرابات طويل كود 71', deletedPrice: 80, currentPrice: 65 },
-            { name: 'مجموعة 6 شرابات قصير كود 72', deletedPrice: 70, currentPrice: 50 },
-            { name: 'مجموعة 4 شرابات رياضي كود 73', deletedPrice: 75, currentPrice: 60 }
-        ];
+import { Container, Row } from 'react-bootstrap';
+import axios from 'axios';
+export default function Offer() {
+    const [offers, setOffer] = React.useState([]);
+    React.useEffect(() => {
+        axios.get('http://localhost:8080/api/offers')
+            .then(response => {
+                console.log("Data received from API:", response.data);  // Log the API response
+                setOffer(response.data);
+            })
+            .catch(error => {
+                console.error("Error fetching offers:", error);  // Log any error that occurs
+            });
+    }, []);
+    
+    
     
         return (
             <div className="container">
@@ -21,10 +30,19 @@ export default function Offers() {
                     </div>
                 </div>
                 <div className="row" id="product-list">
-                    {manSocks.map((sock, index) => (
-                        <SocksCard key={index} name={sock.name} deletedPrice={sock.deletedPrice} currentPrice={sock.price} />
-                    ))}
-                </div>
+    {offers.map((sock, index) => {
+        console.log(sock);  // Log each offer to check the data
+        return (
+            <SocksCard key={index}
+              name={sock.name} 
+              deletedPrice={sock.deletedPrice}
+              Price={sock.price}
+              image={sock.image} 
+            />
+        );
+    })}
+</div>
+
             </div>
         );
 }
