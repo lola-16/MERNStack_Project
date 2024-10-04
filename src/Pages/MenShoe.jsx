@@ -35,7 +35,7 @@ export default function MenShoe() {
                 <Row className="text-center g-4">
                     {shoes.map((shoe, index) => (
                         <ShoeCard
-                            key={index}
+                            key={shoe.id}
                             name={shoe.name}
                             currentPrice={shoe.price}
                             image={shoe.image}
