@@ -1,7 +1,37 @@
 const Product = require('../models/product');
+const Review = require('../models/review');
+const mongoose = require('mongoose');
 
-// Create a new product
-const path = require('path');
+// Helper to validate ObjectId
+const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
+
+// Update product rating
+const updateProductRating = async (productId) => {
+    try {
+        if (!isValidObjectId(productId)) {
+            throw new Error('Invalid Product ID');
+        }
+
+        const result = await Review.aggregate([
+            { $match: { product: mongoose.Types.ObjectId(productId) } },
+            {
+                $group: {
+                    _id: '$product',
+                    averageRating: { $avg: '$rating' }
+                }
+            }
+        ]);
+
+        if (result.length > 0) {
+            const averageRating = result[0].averageRating;
+            await Product.findByIdAndUpdate(productId, { rating: averageRating });
+        } else {
+            await Product.findByIdAndUpdate(productId, { rating: 0 });
+        }
+    } catch (err) {
+        console.error('Error updating product rating:', err);
+    }
+};
 
 // Create a new product
 exports.createProduct = async (req, res) => {
@@ -17,15 +47,16 @@ exports.createProduct = async (req, res) => {
             price,
             category,
             stock,
-            image: imagePath, 
+            image: imagePath,
         });
-        
+        await updateProductRating(newProduct._id);
         res.status(201).json(newProduct);
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
 };
 
+// Get products by category
 exports.getProductsByCategory = async (req, res) => {
     try {
         const categoryNumber = parseInt(req.params.categoryNumber, 10);
@@ -39,6 +70,7 @@ exports.getProductsByCategory = async (req, res) => {
         res.status(500).json({ error: 'Server error while fetching products.' });
     }
 };
+
 // Get all products
 exports.getAllProducts = async (req, res) => {
     try {
@@ -49,46 +81,69 @@ exports.getAllProducts = async (req, res) => {
     }
 };
 
-// Get a single product
+// Get a product by ID
 exports.getProduct = async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id); // Removed populate
-        if (!product) return res.status(404).json({ message: 'Product not found' });
+        const productId = req.params.id;
+
+        if (!isValidObjectId(productId)) {
+            return res.status(400).json({ message: 'Invalid product ID format' });
+        }
+
+        const product = await Product.findById(productId); 
+
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
         res.status(200).json(product);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        console.error('Error fetching product:', error);
+        res.status(500).json({ message: 'Server error' });
     }
 };
 
 // Update a product
-// controllers/productController.js
 exports.updateProduct = async (req, res) => {
     try {
+        const productId = req.params.id;
+
+        if (!isValidObjectId(productId)) {
+            return res.status(400).json({ error: 'Invalid product ID format' });
+        }
+
         const { name, description, price, category, stock } = req.body;
         let updateData = { name, description, price, category, stock };
         if (req.file) {
             updateData.image = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
         }
-        
-        const product = await Product.findByIdAndUpdate(req.params.id, updateData, { new: true });
-        
+        const product = await Product.findByIdAndUpdate(productId, updateData, { new: true });
+
         if (!product) {
             return res.status(404).json({ error: 'Product not found' });
         }
-        
+
+        await updateProductRating(product._id);
         res.status(200).json(product);
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
 };
 
-
 // Delete a product
 exports.deleteProduct = async (req, res) => {
     try {
-        await Product.findByIdAndDelete(req.params.id);
+        const productId = req.params.id;
+
+        if (!isValidObjectId(productId)) {
+            return res.status(400).json({ error: 'Invalid product ID format' });
+        }
+
+        await Product.findByIdAndDelete(productId);
         res.status(204).json({ message: 'Product deleted' });
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
 };
+
+

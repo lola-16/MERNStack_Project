@@ -48,5 +48,4 @@ router.get('/products/category/:categoryNumber', productController.getProductsBy
 router.get('/products/:id', productController.getProduct);
 router.put('/products/:id', upload.single('image'), productController.updateProduct); // If updating image
 router.delete('/products/:id', productController.deleteProduct);
-
 module.exports = router;

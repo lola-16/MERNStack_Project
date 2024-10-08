@@ -1,12 +1,29 @@
 const Review = require('../models/review');
-
-// Create a new review
+const Product = require('../models/product'); 
 exports.createReview = async (req, res) => {
     try {
-        const newReview = await Review.create(req.body);
+        const { product, rating } = req.body;
+
+        // Check if product exists
+        const existingProduct = await Product.findById(product);
+        if (!existingProduct) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
+
+        if (!product || rating === undefined) {
+            return res.status(400).json({ error: 'Product ID and rating are required' });
+        }
+
+        if (rating < 1 || rating > 5) {
+            return res.status(400).json({ error: 'Rating must be between 1 and 5' });
+        }
+
+        const newReview = await Review.create({ product, rating });
+        await updateProductRating(product); 
         res.status(201).json(newReview);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        console.error('Error creating review:', error);
+        res.status(500).json({ error: 'Server error' });
     }
 };
 
@@ -16,7 +33,7 @@ exports.getAllReviews = async (req, res) => {
         const reviews = await Review.find().populate('user').populate('product');
         res.status(200).json(reviews);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(500).json({ error: 'Server error' });
     }
 };
 
@@ -27,26 +44,55 @@ exports.getReview = async (req, res) => {
         if (!review) return res.status(404).json({ message: 'Review not found' });
         res.status(200).json(review);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(500).json({ error: 'Server error' });
     }
 };
 
 // Update a review
 exports.updateReview = async (req, res) => {
     try {
-        const review = await Review.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const { rating } = req.body;
+        const review = await Review.findById(req.params.id);
+
+        if (!review) return res.status(404).json({ message: 'Review not found' });
+
+        if (rating !== undefined) { // Check if rating is provided
+            if (rating < 1 || rating > 5) {
+                return res.status(400).json({ error: 'Rating must be between 1 and 5' });
+            }
+            review.rating = rating; // Update the rating if valid
+        }
+        
+        await review.save();
+        await updateProductRating(review.product); // Update product rating after review update
         res.status(200).json(review);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        console.error('Error updating review:', error);
+        res.status(500).json({ error: 'Server error' });
     }
 };
 
 // Delete a review
 exports.deleteReview = async (req, res) => {
     try {
-        await Review.findByIdAndDelete(req.params.id);
-        res.status(204).json({ message: 'Review deleted' });
+        const review = await Review.findByIdAndDelete(req.params.id);
+
+        if (!review) return res.status(404).json({ message: 'Review not found' });
+
+        await updateProductRating(review.product); // Update product rating after deletion
+        res.status(204).json({ message: 'Review deleted successfully' }); // Provide a confirmation message
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        console.error('Error deleting review:', error);
+        res.status(500).json({ error: 'Server error' });
     }
 };
+
+// Helper function to update product rating
+async function updateProductRating(productId) {
+    const reviews = await Review.find({ product: productId });
+    const averageRating = reviews.length > 0 
+        ? reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length 
+        : 0; // or null
+
+    await Product.findByIdAndUpdate(productId, { averageRating: averageRating });
+}

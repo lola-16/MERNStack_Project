@@ -1,5 +1,3 @@
-// src/App.js
-
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
@@ -19,6 +17,12 @@ import Adress from './Pages/Adress';
 import AccountDetails from './Pages/AccountDetails';
 import Orders from './Pages/Orders';
 import CategoryPage from './Pages/CategoryPage'; 
+import AdminDashboard from './Pages/AdminDashboard'; 
+import Categories from './components/Categories';
+import Products from './components/Product'; 
+import Users from './components/Users';
+import Sales from './components/Sales';
+import OrderAdmin from './components/OrderAdmin';
 
 /* eslint-disable*/
 function App() {
@@ -27,10 +31,7 @@ function App() {
       <div className="App">
         <Header />
         <Routes>
-          {/* Dynamic Route for Categories */}
           <Route path="/category/:categoryNumber" element={<CategoryPage />} />
-          
-          {/* Other Routes */}
           <Route path="/Account/Orders" element={<Orders />} />
           <Route path="/Account/AccountDetails" element={<AccountDetails />} />
           <Route path="/Account/Address" element={<Adress />} />
@@ -44,6 +45,12 @@ function App() {
           <Route path="/Account" element={<Account />} />
           <Route path="/Offers" element={<Offers />} />
           <Route path="/OrderedForm" element={<OrderedForm />} />
+          <Route path="/AdminDashboard/" element={<AdminDashboard />} />
+          <Route path="/AdminDashboard/category" element={<Categories />} />
+          <Route path="/AdminDashboard/product" element={<Products />} />
+          <Route path="/AdminDashboard/user" element={<Users />} />
+          <Route path="/AdminDashboard/sales" element={<Sales />} />
+          <Route path="/AdminDashboard/ordersAdmin" element={<OrderAdmin />} />
         </Routes>
         <Footer />
       </div>
