@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Container, Row, Col, Button, Spinner, Alert } from 'react-bootstrap';
-import { FaStar } from 'react-icons/fa'; 
+import { FaStar } from 'react-icons/fa';
 import './Css/ProductDetails.css';
 import ShoeCard from '../components/ShoeCard';
 import axios from 'axios';
-import { useDispatch } from 'react-redux'; 
-import { addProduct } from '../Rtk/Slices/CartSlice'; 
+import { useDispatch } from 'react-redux';
+import { addProduct } from '../Rtk/Slices/CartSlice';
 
 const ProductDetails = (props) => {
     const dispatch = useDispatch();
 
     const handleAddToCart = () => {
-        if (!product) return; 
+        if (!product) return;
         dispatch(addProduct({
             id: product._id,
             name: product.name,
@@ -21,14 +21,16 @@ const ProductDetails = (props) => {
         }));
     };
 
-    const { id } = useParams(); 
+    const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [relatedProducts, setRelatedProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [relatedLoading, setRelatedLoading] = useState(true);
     const [error, setError] = useState(null);
     const [relatedError, setRelatedError] = useState(null);
-    const [customerRating, setCustomerRating] = useState(0); // New state for customer rating
+    const [customerRating, setCustomerRating] = useState(0);
+    const [ratingSubmitted, setRatingSubmitted] = useState(false);
+    const [ratingError, setRatingError] = useState(null);
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -68,9 +70,29 @@ const ProductDetails = (props) => {
     }, [product]);
 
     const handleStarClick = (index) => {
-        setCustomerRating(index + 1); // Set the rating based on star clicked
+        setCustomerRating(index + 1); 
     };
 
+    const submitRating = async () => {
+        if (!customerRating) return;
+    
+        try {
+            const ratingData = {
+                product: product._id,
+                rating: customerRating,
+            };
+            console.log('Submitting rating:', ratingData);
+            const response = await axios.post('http://localhost:8080/api/reviews', ratingData);
+            console.log('Rating submitted successfully:', response.data);
+            setRatingSubmitted(true);
+            setRatingError(null);
+        } catch (error) {
+            console.error('Error submitting rating:', error.response ? error.response.data : error);
+            setRatingSubmitted(false);
+            setRatingError('Failed to submit rating. Please try again.');
+        }
+    };
+    
     if (loading) {
         return (
             <Container className="mt-5 text-center">
@@ -107,15 +129,19 @@ const ProductDetails = (props) => {
                 </Col>
                 <Col xs={12} md={6}>
                     <h1 className='mb-5'>{product.name}</h1>
-                    <p style={{fontSize:30}} className='mb-3'>{product.price} جنيها {product.deletedPrice && <del>{product.deletedPrice} جنيها</del>}</p>
+                    <p style={{ fontSize: 30 }} className='mb-3'>{product.price} جنيها {product.deletedPrice && <del>{product.deletedPrice} جنيها</del>}</p>
                     <h2>الاحجام المتاحة</h2>
                     <div className='sizes'>
-                        {product.sizes && product.sizes.map((size, index) => (
-                            <span key={index} className="size">{size}</span>
-                        ))}
+                        {product.sizes && product.sizes.length > 0 ? (
+                            product.sizes.map((size, index) => (
+                                <span key={index} className="size">{size}</span>
+                            ))
+                        ) : (
+                            <p>لا توجد أحجام متاحة لهذا المنتج.</p>
+                        )}
                     </div>
                     <Row className="text-center cart">
-                        <Col >
+                        <Col>
                             <Button className="car-btn w-100" onClick={handleAddToCart}>اضافة لعربة التسوق</Button>
                         </Col>
                     </Row>
@@ -146,7 +172,7 @@ const ProductDetails = (props) => {
                     </Row>
                 </Col>
             </Row>
-            
+
             <div className="description text-end mt-4">
                 <h2>الوصف</h2>
                 <hr />
@@ -163,10 +189,15 @@ const ProductDetails = (props) => {
                             key={index}
                             color={index < customerRating ? "#ffc107" : "#e4e5e9"}
                             onClick={() => handleStarClick(index)}
-                            style={{ cursor: 'pointer' }} // Add pointer to show it's clickable
+                            style={{ cursor: 'pointer' }}
                         />
                     ))}
                 </div>
+                <button className="btn btn-primary mt-3" onClick={submitRating}>
+                    ارسال التقييم
+                </button>
+                {ratingSubmitted && <p className="mt-2 text-success">تم إرسال تقييمك بنجاح!</p>}
+                {ratingError && <p className="text-danger mt-2">{ratingError}</p>}
             </div>
 
             <div className="related text-end mt-4">
@@ -177,7 +208,7 @@ const ProductDetails = (props) => {
                         <span className="visually-hidden">Loading...</span>
                     </Spinner>
                 ) : relatedError ? (
-                    <p className="text-danger">{relatedError}</p>
+                    <Alert variant="danger">{relatedError}</Alert>
                 ) : relatedProducts.length > 0 ? (
                     <Row className="row" id="product-list">
                         {relatedProducts.map((sock) => (

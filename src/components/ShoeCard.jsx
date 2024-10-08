@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, Col } from 'react-bootstrap';
 import { CiHeart } from "react-icons/ci";
 import './css/Card.css'; 
+import { Link } from 'react-router-dom';
 
 export default function ShoeCard(props) {
     return (
@@ -16,9 +17,11 @@ export default function ShoeCard(props) {
                         <span className="deleted-price">700 جنيها</span>
                         <strong className="current-price">{props.currentPrice} جنيها</strong>
                     </Card.Text>
-                    <button  className="btn-full-width btn_cart">
-                        عرض الخيارات
-                    </button>
+                    <Link to={`/product/${props.id}`}>
+                        <button className="btn-full-width">
+                            عرض الخيارات
+                        </button>
+                    </Link>
                 </Card.Body>
             </Card>
         </Col>
