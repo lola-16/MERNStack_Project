@@ -43,6 +43,7 @@ const cartSlice = createSlice({
       if (existingProduct) {
         existingProduct.quantity += 1;
       } else {
+        alert("product added");
         state.cartItems.push({ ...product, quantity: 1 });
       }
 
