@@ -1,0 +1,6 @@
+@media (max-width: 768px) {
+    .cat th,.cat td {
+        display: inline-block;
+        width: 88%;
+    }
+}

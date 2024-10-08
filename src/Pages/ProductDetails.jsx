@@ -1,20 +1,34 @@
-// ProductDetails.js
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Container, Row, Col, Button, ButtonGroup, Spinner, Alert } from 'react-bootstrap';
+import { Container, Row, Col, Button, Spinner, Alert } from 'react-bootstrap';
 import { FaStar } from 'react-icons/fa'; 
 import './Css/ProductDetails.css';
 import ShoeCard from '../components/ShoeCard';
 import axios from 'axios';
+import { useDispatch } from 'react-redux'; 
+import { addProduct } from '../Rtk/Slices/CartSlice'; 
 
-const ProductDetails = () => {
-    const { id } = useParams(); // Extract the product ID from the URL
+const ProductDetails = (props) => {
+    const dispatch = useDispatch();
+
+    const handleAddToCart = () => {
+        if (!product) return; 
+        dispatch(addProduct({
+            id: product._id,
+            name: product.name,
+            price: product.price,
+            image: product.image,
+        }));
+    };
+
+    const { id } = useParams(); 
     const [product, setProduct] = useState(null);
     const [relatedProducts, setRelatedProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [relatedLoading, setRelatedLoading] = useState(true);
     const [error, setError] = useState(null);
     const [relatedError, setRelatedError] = useState(null);
+    const [customerRating, setCustomerRating] = useState(0); // New state for customer rating
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -41,7 +55,6 @@ const ProductDetails = () => {
             try {
                 setRelatedLoading(true);
                 setRelatedError(null);
-                // Assuming related products are in the same category
                 const response = await axios.get(`http://localhost:8080/api/products/category/${product.category}`);
                 setRelatedProducts(response.data);
             } catch (err) {
@@ -51,9 +64,12 @@ const ProductDetails = () => {
                 setRelatedLoading(false);
             }
         };
-
         fetchRelatedProducts();
     }, [product]);
+
+    const handleStarClick = (index) => {
+        setCustomerRating(index + 1); // Set the rating based on star clicked
+    };
 
     if (loading) {
         return (
@@ -94,25 +110,16 @@ const ProductDetails = () => {
                     <p style={{fontSize:30}} className='mb-3'>{product.price} جنيها {product.deletedPrice && <del>{product.deletedPrice} جنيها</del>}</p>
                     <h2>الاحجام المتاحة</h2>
                     <div className='sizes'>
-                        {/* Dynamically render sizes if available */}
                         {product.sizes && product.sizes.map((size, index) => (
                             <span key={index} className="size">{size}</span>
                         ))}
                     </div>
                     <Row className="text-center cart">
-                        <Col xs={7}>
-                            <Button className="car-btn w-100">اضافة لعربة التسوق</Button>
-                        </Col>
-                        <Col xs={5}>
-                            <ButtonGroup className='ButtonGroup'>
-                                <Button className="cc" variant="secondary">+</Button>
-                                <Button className="cc" variant="secondary">0</Button>
-                                <Button className="cc" variant="secondary">-</Button>
-                            </ButtonGroup>
+                        <Col >
+                            <Button className="car-btn w-100" onClick={handleAddToCart}>اضافة لعربة التسوق</Button>
                         </Col>
                     </Row>
                     <div className="rate m-2">
-                        {/* Assuming product.rating exists and is between 0-5 */}
                         {Array.from({ length: 5 }, (_, index) => (
                             <FaStar key={index} color={index < (product.rating || 0) ? "#ffc107" : "#e4e5e9"} />
                         ))}
@@ -139,13 +146,29 @@ const ProductDetails = () => {
                     </Row>
                 </Col>
             </Row>
+            
             <div className="description text-end mt-4">
                 <h2>الوصف</h2>
                 <hr />
-                <p>
-                    {product.description}
-                </p>
+                <p>{product.description}</p>
             </div>
+
+            {/* Customer Review Part */}
+            <div className="customer-review text-end mt-4">
+                <h2>تقييمك للمنتج!</h2>
+                <hr />
+                <div className="rate">
+                    {Array.from({ length: 5 }, (_, index) => (
+                        <FaStar
+                            key={index}
+                            color={index < customerRating ? "#ffc107" : "#e4e5e9"}
+                            onClick={() => handleStarClick(index)}
+                            style={{ cursor: 'pointer' }} // Add pointer to show it's clickable
+                        />
+                    ))}
+                </div>
+            </div>
+
             <div className="related text-end mt-4">
                 <h2>العناصر المشابهة</h2>
                 <hr />
@@ -160,7 +183,7 @@ const ProductDetails = () => {
                         {relatedProducts.map((sock) => (
                             <ShoeCard
                                 key={sock._id}
-                                id={sock._id} // Pass id prop if needed
+                                id={sock._id}
                                 image={sock.image}
                                 name={sock.name}
                                 deletedPrice={sock.deletedPrice}

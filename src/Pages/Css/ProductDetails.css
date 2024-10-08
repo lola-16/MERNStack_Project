@@ -1,5 +1,5 @@
 img {
-    height: 90%;
+    height: 76%;
     width: 90%;
     border-radius: 30px;
 }
@@ -37,7 +37,7 @@ img {
     color: rgb(255, 157, 0);
 }
 .card-detail{
-    height: 7em;
+    height: 3em;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -65,7 +65,7 @@ img {
 }
 .img-fluid{
     width: 100%;
-    height: 70%;
+    height: 76%;
     border-radius: 30px;
 }
 .ButtonGroup{
@@ -76,4 +76,11 @@ img {
 
 .cc{
     background-color: rgb(85, 49, 109) !important;
+}
+
+.rate{
+    display: flex;
+    gap: 10px;
+    justify-content:center;
+    font-size: 35px;
 }

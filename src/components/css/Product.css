@@ -1,0 +1,150 @@
+/* src/components/Products.css */
+
+/* General Styles */
+.cont {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 50px;
+}
+
+/* Title */
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #750d5f;
+    /* Dark purple color for titles */
+}
+
+/* Form Styles */
+.cont form {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    width: 50%;
+}
+
+.cont .form-group {
+    margin-bottom: 15px;
+}
+
+.cont label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+    /* Dark gray for labels */
+}
+
+.cont input[type="text"],
+.cont input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.cont input[type="text"]:focus,
+.cont input[type="number"]:focus {
+    border-color: #750d5f;
+    /* Purple focus border */
+    outline: none;
+    /* Remove outline */
+}
+
+/* Button Styles */
+.cont button {
+    background-color: #750d5f;
+    /* Dark purple background */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px;
+    /* Space between buttons */
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: #9b66aa;
+    /* Lighter purple on hover */
+}
+
+/* Table Styles */
+/* Responsive Table Styles */
+/* General Table Layout */
+/* src/components/Products.css */
+
+/* Table Styles */
+table {
+    width: 100%;
+    table-layout: fixed; /* Ensures equal width for each column */
+    border-collapse: collapse;
+    margin-top: 20px;
+    overflow-x: auto; /* Enable horizontal scrolling on smaller screens */
+}
+
+th, td {
+    width: 15%; /* Adjusted for more columns */
+    text-align: center;
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+/* Description styling for truncation */
+td:nth-child(9) {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Ensures truncation of text */
+}
+
+/* Image Styling */
+.image-cont img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}
+
+/* Form Styling */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+/* Action Buttons */
+.action-buttons button {
+    margin: 0 5px;
+}
+
+.delete {
+    background-color: red;
+    color: white;
+}
+th{
+    background-color: #9b66aa;
+}
+
+/* Media Query for Smaller Screens */
+@media (max-width: 768px) {
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .prod th,.prod td {
+        display: inline-block;
+        width: 18%;
+    }
+    .cont form{
+        width: 90%;
+    }
+    
+}

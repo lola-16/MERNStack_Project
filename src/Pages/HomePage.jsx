@@ -69,12 +69,13 @@ const HomePage = () => {
               </div>
               <h5>{item.title}</h5>
               <Link to={item.to} className='More'>
-                المزيد +
+                المزيد↖
               </Link>
             </Col>
           ))}
         </Row>
       </Container>
+
 
       <Container fluid className='mt-3'>
         <h1 className='head'>
@@ -88,8 +89,10 @@ const HomePage = () => {
           {products.map((sock) => (
             <SocksCard
               key={sock._id}
+              id={sock._id}
               image={sock.image}
               name={sock.name}
+              deletedPrice={sock.deletedPrice}
               currentPrice={sock.price}
             />
           ))}
@@ -104,16 +107,19 @@ const HomePage = () => {
           </Link>
         </h1>
         {werror && <p className="error-message">{werror}</p>}
-        <Row>
+        <Row id="product-list">
           {wproducts.map((sock) => (
             <SocksCard
               key={sock._id}
+              id={sock._id}
               image={sock.image}
               name={sock.name}
+              deletedPrice={sock.deletedPrice}
               currentPrice={sock.price}
             />
           ))}
         </Row>
+
       </Container>
     </section>
   );
