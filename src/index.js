@@ -5,10 +5,12 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle'
 import { Provider } from "react-redux";
-import { store } from './Rtk/Slices/Store';
+// src/index.js
+import Store from './Rtk/Store'; // Correct
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <Provider store={store}>
+  <Provider store={Store}>
   <App />
   </Provider>
 );

@@ -1,51 +1,45 @@
-import React, { useState } from 'react';
+// Login.js
+import React, { useState, useEffect } from 'react';
 import './Css/Login.css';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../Rtk/Slices/Auth';
+import { Spinner } from 'react-bootstrap';
 
 const Login = () => {
-    const [email, setEmail] = useState(""); 
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState({});
-    const [passwordVisible, setPasswordVisible] = useState(false);
+    const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const togglePasswordVisibility = () => {
-        setPasswordVisible(!passwordVisible);
-    };
+    const [formData, setFormData] = useState({
+        email: "",
+        password: ""
+    });
 
-    const handleEmailChange = (e) => { 
-        setEmail(e.target.value);
-    };
+    const { email, password } = formData;
 
-    const handlePasswordChange = (e) => {
-        setPassword(e.target.value);
-    };
+    const user = useSelector((state) => state.auth.user);
+    const token = useSelector((state) => state.auth.token);
+    const loading = useSelector((state) => state.auth.loading);
+    const error = useSelector((state) => state.auth.error);
+    
+    const [formErrors, setError] = useState({});
+    const [hasNavigated, setHasNavigated] = useState(false); // New state to prevent multiple navigations
 
-    const submitHandler = async (e) => {
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+    
+    const handleSubmit = (e) => {
         e.preventDefault();
         if (hasErrors()) {
             console.log(error);
         } else {
-            try {
-                const response = await axios.post('http://localhost:8080/api/login', { email, password });
-                console.log(response.data);
-                localStorage.setItem('token', response.data.token);
-                navigate('/Account');
-            } catch (err) {
-                console.error(err);
-                if (err.response && err.response.data) {
-                    setError({ server: err.response.data.message || 'Login failed' });
-                } else {
-                    setError({ server: 'An unexpected error occurred' });
-                }
-            }
+            dispatch(loginUser({ email, password }));
         }
     };
-
+    
     const hasErrors = () => {
         const errors = {};
-        // Simple email regex for validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             errors.email = "البريد الإلكتروني غير صالح";
@@ -57,63 +51,94 @@ const Login = () => {
         return Object.keys(errors).length > 0;
     };
 
+    useEffect(() => {
+        console.log('useEffect triggered');
+        console.log('Token:', token);
+        console.log('User:', user);
+        console.log('Has Navigated:', hasNavigated);
+        
+        if (token && user && !hasNavigated) {
+            if (user.role === 'admin') {
+                console.log('Navigating to AdminDashboard');
+                navigate('/admin-dashboard', { replace: true });
+            } else {
+                console.log('Navigating to Account');
+                navigate('/account', { replace: true });
+            }
+            setHasNavigated(true); // Prevent further navigations
+        }
+    }, [token, user, navigate, hasNavigated]);
+
     return (
         <div className="container form-container">
             <div className="form-box">
                 <h3>تسجيل الدخول</h3>
-                <form onSubmit={submitHandler} noValidate>
+                <form onSubmit={handleSubmit} noValidate>
                     <div className="mb-3">
                         <label htmlFor="email" className="form-label">
                             البريد الإلكتروني <span className="text-danger">*</span>
                         </label>
                         <input
                             type="email"
-                            className={`form-control ${error.email ? 'is-invalid' : ''}`}
+                            className={`form-control ${formErrors.email ? 'is-invalid' : ''}`}
                             id="email"
+                            name="email"
                             required
                             value={email}
-                            onChange={handleEmailChange}
+                            onChange={handleChange}
                         />
-                        {error.email && (
+                        {formErrors.email && (
                             <div className="invalid-feedback">
-                                {error.email}
+                                {formErrors.email}
                             </div>
                         )}
                     </div>
+
                     <div className="mb-3">
                         <label htmlFor="password" className="form-label">
                             كلمة المرور <span className="text-danger">*</span>
                         </label>
                         <div className="input-group">
                             <input
-                                type={passwordVisible ? 'text' : 'password'}
-                                className={`form-control ${error.password ? 'is-invalid' : ''}`}
+                                type='password'
+                                className={`form-control ${formErrors.password ? 'is-invalid' : ''}`}
                                 id="password"
+                                name="password"
                                 required
                                 value={password}
-                                onChange={handlePasswordChange}
+                                onChange={handleChange}
+                                autoComplete="current-password"
                             />
-                            <button
-                                className="btn btn-outline-secondary"
-                                type="button"
-                                onClick={togglePasswordVisibility}
-                            >
-                                {passwordVisible ? 'إخفاء' : 'عرض'}
-                            </button>
-                            {error.password && (
+                            {formErrors.password && (
                                 <div className="invalid-feedback">
-                                    {error.password}
+                                    {formErrors.password}
                                 </div>
                             )}
                         </div>
                     </div>
-                    {error.server && (
+                    {error && error.message && (
                         <div className="alert alert-danger" role="alert">
-                            {error.server}
+                            {error.message}
                         </div>
                     )}
-                    <button type="submit" className="btn btn-primary w-100">تسجيل الدخول</button>
-                    <Link to="/Register" className="text-center d-block mt-3">مستخدم جديد؟ تسجيل حساب</Link>
+                    <button type="submit" className="btn btn-primary w-100" disabled={loading}>
+                        {loading ? (
+                            <>
+                                <Spinner
+                                    as="span"
+                                    animation="border"
+                                    size="sm"
+                                    role="status"
+                                    aria-hidden="true"
+                                />{' '}
+                                جاري تسجيل الدخول...
+                            </>
+                        ) : (
+                            'تسجيل الدخول'
+                        )}
+                    </button>
+
+                    <Link to="/register" className="text-center d-block mt-3">مستخدم جديد؟ تسجيل حساب</Link>
                 </form>
             </div>
         </div>

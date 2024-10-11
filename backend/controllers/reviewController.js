@@ -1,29 +1,26 @@
 const Review = require('../models/review');
 const Product = require('../models/product'); 
+
 exports.createReview = async (req, res) => {
     try {
+        // Create a new review
         const { product, rating } = req.body;
-
-        // Check if product exists
-        const existingProduct = await Product.findById(product);
-        if (!existingProduct) {
-            return res.status(404).json({ error: 'Product not found' });
-        }
-
-        if (!product || rating === undefined) {
-            return res.status(400).json({ error: 'Product ID and rating are required' });
-        }
-
-        if (rating < 1 || rating > 5) {
-            return res.status(400).json({ error: 'Rating must be between 1 and 5' });
-        }
-
         const newReview = await Review.create({ product, rating });
-        await updateProductRating(product); 
+
+        // Fetch all reviews for this product
+        const reviews = await Review.find({ product });
+
+        // Calculate the new average rating
+        const totalRating = reviews.reduce((acc, review) => acc + review.rating, 0);
+        const averageRating = totalRating / reviews.length;
+
+        // Update the product with the new average rating
+        await Product.findByIdAndUpdate(product, { rating: averageRating });
+
         res.status(201).json(newReview);
     } catch (error) {
-        console.error('Error creating review:', error);
-        res.status(500).json({ error: 'Server error' });
+        console.error(error);
+        res.status(500).json({ message: 'Failed to submit review' });
     }
 };
 

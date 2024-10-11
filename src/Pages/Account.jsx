@@ -1,9 +1,24 @@
+// Account.js
 import React from 'react';
 import { Container, Row, Col, Nav } from 'react-bootstrap';
 import './Css/Account.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../Rtk/Slices/Auth'; // Adjust the path based on your project structure
 
 export default function Account() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  // Accessing user data from Redux store
+  const user = useSelector((state) => state.auth.user);
+  
+  // Logout handler
+  const handleLogout = () => {
+    dispatch(logout()); // Dispatch the logout action
+    navigate('/login', { replace: true }); // Redirect to the login page
+  };
+
   return (
     <Container className="my-5">
       <Row>
@@ -12,27 +27,32 @@ export default function Account() {
             <div className="user-info mb-4">
               <div className="d-flex align-items-center">
                 <div className="ms-2">
-                  <strong>monadewidar02</strong>
+                  {/* Dynamically display the username */}
+                  <strong>{user?.username || 'User'}</strong>
                 </div>
               </div>
             </div>
-            <h5 className="mb-4" as={Link} to="/Account">لوحة التحكم</h5>
+            <h5 className="mb-4">لوحة التحكم</h5>
             <Nav className="flex-column">
-            <Nav.Link as={Link} to="/Account/Orders">الطلبات</Nav.Link>
-              <Nav.Link  as={Link} to="/Account/Address">العنوان</Nav.Link>
-              <Nav.Link  as={Link} to="/Account/AccountDetails">تفاصيل الحساب</Nav.Link>
-              <Nav.Link href="#">تسجيل الخروج</Nav.Link>
+              <Nav.Link as={Link} to="/account/orders">الطلبات</Nav.Link>
+              <Nav.Link as={Link} to="/account/address">العنوان</Nav.Link>
+              <Nav.Link as={Link} to="/account/account-details">تفاصيل الحساب</Nav.Link>
+              {/* Implement logout functionality */}
+              <Nav.Link onClick={handleLogout}>تسجيل الخروج</Nav.Link>
             </Nav>
           </div>
         </Col>
         <Col md={9}>
           <div className="content">
             <p className="user-welcome">
-              مرحبًا monadewidar02 (لست monadewidar02؟ <Nav.Link href="#" className="d-inline">تسجيل الخروج</Nav.Link>)
+              مرحبًا {user?.username || 'User'} (لست {user?.username || 'User'}؟{' '}
+              {/* Implement logout functionality */}
+              <Nav.Link onClick={handleLogout} className="d-inline">تسجيل الخروج</Nav.Link>)
             </p>
             <p>
-              من خلال لوحة تحكم الحساب الخاص بك، يمكنك استعراض <Nav.Link href="#" className="d-inline">أحدث الطلبات</Nav.Link>، إدارة 
-              <Nav.Link href="#" className="d-inline">عناوين الشحن والفواتير</Nav.Link> الخاصة بك، بالإضافة إلى 
+              من خلال لوحة تحكم الحساب الخاص بك، يمكنك استعراض{' '}
+              <Nav.Link href="#" className="d-inline">أحدث الطلبات</Nav.Link>، إدارة{' '}
+              <Nav.Link href="#" className="d-inline">عناوين الشحن والفواتير</Nav.Link> الخاصة بك، بالإضافة إلى{' '}
               <Nav.Link href="#" className="d-inline">تعديل كلمة المرور وتفاصيل حسابك</Nav.Link>.
             </p>
           </div>

@@ -20,8 +20,8 @@ const updateProductRating = async (productId) => {
                     averageRating: { $avg: '$rating' }
                 }
             }
-        ]);
-
+        ]);        
+        console.log('Aggregation result:', result);
         if (result.length > 0) {
             const averageRating = result[0].averageRating;
             await Product.findByIdAndUpdate(productId, { rating: averageRating });
@@ -75,7 +75,7 @@ exports.getProductsByCategory = async (req, res) => {
 exports.getAllProducts = async (req, res) => {
     try {
         const products = await Product.find();
-        res.status(200).json(products);
+        res.status(200).json(products);  
     } catch (error) {
         res.status(400).json({ error: error.message });
     }

@@ -1,23 +1,21 @@
-// routes/productRoutes.js
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const productController = require('../controllers/productController');
+const authenticateToken = require('../middlewares/authMiddleware'); 
 
-// Configure Multer Storage
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/'); // Uploads directory
+        cb(null, 'uploads/');
     },
     filename: function (req, file, cb) {
-        // Generate a unique filename using current timestamp and original name
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
         cb(null, uniqueSuffix + path.extname(file.originalname));
     }
 });
 
-// File Filter to Accept Only Images
 const fileFilter = (req, file, cb) => {
     const allowedTypes = /jpeg|jpg|png|gif/;
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
@@ -30,22 +28,20 @@ const fileFilter = (req, file, cb) => {
     }
 };
 
-// Initialize Multer with Storage and File Filter
 const upload = multer({ 
     storage: storage,
     fileFilter: fileFilter,
-    limits: { fileSize: 5 * 1024 * 1024 } // 5 MB limit
+    limits: { fileSize: 5 * 1024 * 1024 } 
 });
 
-// Routes
-
-// Create a New Product with Image Upload
-router.post('/products', upload.single('image'), productController.createProduct);
-
-// Other product routes
+// Public route - no token required
 router.get('/products', productController.getAllProducts);
-router.get('/products/category/:categoryNumber', productController.getProductsByCategory);
-router.get('/products/:id', productController.getProduct);
-router.put('/products/:id', upload.single('image'), productController.updateProduct); // If updating image
-router.delete('/products/:id', productController.deleteProduct);
+
+// Protected routes - token required
+router.post('/products', authenticateToken, upload.single('image'), productController.createProduct); 
+router.get('/products/category/:categoryNumber', authenticateToken, productController.getProductsByCategory);
+router.get('/products/:id', authenticateToken, productController.getProduct);
+router.put('/products/:id', authenticateToken, upload.single('image'), productController.updateProduct);
+router.delete('/products/:id', authenticateToken, productController.deleteProduct);
+
 module.exports = router;

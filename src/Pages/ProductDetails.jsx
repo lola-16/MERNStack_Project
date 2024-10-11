@@ -8,26 +8,13 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { addProduct } from '../Rtk/Slices/CartSlice';
 
-const ProductDetails = (props) => {
+const ProductDetails = () => {
     const dispatch = useDispatch();
-
-    const handleAddToCart = () => {
-        if (!product) return;
-        dispatch(addProduct({
-            id: product._id,
-            name: product.name,
-            price: product.price,
-            image: product.image,
-        }));
-    };
-
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [relatedProducts, setRelatedProducts] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [relatedLoading, setRelatedLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [relatedError, setRelatedError] = useState(null);
     const [customerRating, setCustomerRating] = useState(0);
     const [ratingSubmitted, setRatingSubmitted] = useState(false);
     const [ratingError, setRatingError] = useState(null);
@@ -35,8 +22,6 @@ const ProductDetails = (props) => {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                setLoading(true);
-                setError(null);
                 const response = await axios.get(`http://localhost:8080/api/products/${id}`);
                 setProduct(response.data);
             } catch (err) {
@@ -55,44 +40,50 @@ const ProductDetails = (props) => {
             if (!product) return;
 
             try {
-                setRelatedLoading(true);
-                setRelatedError(null);
                 const response = await axios.get(`http://localhost:8080/api/products/category/${product.category}`);
                 setRelatedProducts(response.data);
             } catch (err) {
                 console.error('Error fetching related products:', err);
-                setRelatedError('Failed to load related products.');
-            } finally {
-                setRelatedLoading(false);
+                setError('Failed to load related products.');
             }
         };
         fetchRelatedProducts();
     }, [product]);
+
+    const handleAddToCart = () => {
+        if (product) {
+            dispatch(addProduct({
+                id: product._id,
+                name: product.name,
+                price: product.price,
+                image: product.image,
+            }));
+        }
+    };
 
     const handleStarClick = (index) => {
         setCustomerRating(index + 1); 
     };
 
     const submitRating = async () => {
-        if (!customerRating) return;
-    
+        if (!customerRating || !product) return;
+
         try {
-            const ratingData = {
+            await axios.post('http://localhost:8080/api/reviews', {
                 product: product._id,
                 rating: customerRating,
-            };
-            console.log('Submitting rating:', ratingData);
-            const response = await axios.post('http://localhost:8080/api/reviews', ratingData);
-            console.log('Rating submitted successfully:', response.data);
+            });
+            const updatedProduct = await axios.get(`http://localhost:8080/api/products/${id}`);
+            setProduct(updatedProduct.data);
             setRatingSubmitted(true);
             setRatingError(null);
         } catch (error) {
-            console.error('Error submitting rating:', error.response ? error.response.data : error);
+            console.error('Error submitting rating:', error.response?.data || error);
             setRatingSubmitted(false);
             setRatingError('Failed to submit rating. Please try again.');
         }
     };
-    
+
     if (loading) {
         return (
             <Container className="mt-5 text-center">
@@ -129,10 +120,12 @@ const ProductDetails = (props) => {
                 </Col>
                 <Col xs={12} md={6}>
                     <h1 className='mb-5'>{product.name}</h1>
-                    <p style={{ fontSize: 30 }} className='mb-3'>{product.price} جنيها {product.deletedPrice && <del>{product.deletedPrice} جنيها</del>}</p>
+                    <p style={{ fontSize: 30 }} className='mb-3'>
+                        {product.price} جنيها {product.deletedPrice && <del>{product.deletedPrice} جنيها</del>}
+                    </p>
                     <h2>الاحجام المتاحة</h2>
                     <div className='sizes'>
-                        {product.sizes && product.sizes.length > 0 ? (
+                        {product.sizes?.length > 0 ? (
                             product.sizes.map((size, index) => (
                                 <span key={index} className="size">{size}</span>
                             ))
@@ -145,7 +138,7 @@ const ProductDetails = (props) => {
                             <Button className="car-btn w-100" onClick={handleAddToCart}>اضافة لعربة التسوق</Button>
                         </Col>
                     </Row>
-                    <div className="rate m-2">
+                    <div className=" m-2">
                         {Array.from({ length: 5 }, (_, index) => (
                             <FaStar key={index} color={index < (product.rating || 0) ? "#ffc107" : "#e4e5e9"} />
                         ))}
@@ -203,13 +196,7 @@ const ProductDetails = (props) => {
             <div className="related text-end mt-4">
                 <h2>العناصر المشابهة</h2>
                 <hr />
-                {relatedLoading ? (
-                    <Spinner animation="border" role="status">
-                        <span className="visually-hidden">Loading...</span>
-                    </Spinner>
-                ) : relatedError ? (
-                    <Alert variant="danger">{relatedError}</Alert>
-                ) : relatedProducts.length > 0 ? (
+                {relatedProducts.length > 0 ? (
                     <Row className="row" id="product-list">
                         {relatedProducts.map((sock) => (
                             <ShoeCard

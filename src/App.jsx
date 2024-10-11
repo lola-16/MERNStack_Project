@@ -1,4 +1,5 @@
-import React from 'react';
+// App.js
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -13,44 +14,63 @@ import Offers from './Pages/Offers';
 import Register from './Pages/Register';
 import FavPage from './Pages/FavPage';
 import Cart from './Pages/Cart';
-import Adress from './Pages/Adress';
+import Address from './Pages/Adress'; 
 import AccountDetails from './Pages/AccountDetails';
 import Orders from './Pages/Orders';
-import CategoryPage from './Pages/CategoryPage'; 
-import AdminDashboard from './Pages/AdminDashboard'; 
+import CategoryPage from './Pages/CategoryPage';
+import AdminDashboard from './Pages/AdminDashboard';
 import Categories from './components/Categories';
-import Products from './components/Product'; 
+import Products from './components/Product';
 import Users from './components/Users';
 import Sales from './components/Sales';
 import OrderAdmin from './components/OrderAdmin';
+import ProtectedRoute from './components/ProtectedRoute';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUser } from './Rtk/Slices/Auth';
 
-/* eslint-disable*/
 function App() {
+  const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.auth);
+  
+  useEffect(() => {
+    if (token) {
+      dispatch(fetchUser());
+    }
+  }, [dispatch, token]);
+  
   return (
     <Router>
       <div className="App">
         <Header />
         <Routes>
           <Route path="/category/:categoryNumber" element={<CategoryPage />} />
-          <Route path="/Account/Orders" element={<Orders />} />
-          <Route path="/Account/AccountDetails" element={<AccountDetails />} />
-          <Route path="/Account/Address" element={<Adress />} />
-          <Route path="/Cart" element={<Cart />} />
-          <Route path="/Fav" element={<FavPage />} />
-          <Route path="/Register" element={<Register />} />
-          <Route path="/Login" element={<Login />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/fav" element={<FavPage />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/" element={<HomePage />} />
-          <Route path="/menShoe" element={<MenShoe />} />
+          <Route path="/men-shoe" element={<MenShoe />} />
           <Route path="/product/:id" element={<ProductDetails />} />
-          <Route path="/Account" element={<Account />} />
-          <Route path="/Offers" element={<Offers />} />
-          <Route path="/OrderedForm" element={<OrderedForm />} />
-          <Route path="/AdminDashboard/" element={<AdminDashboard />} />
-          <Route path="/AdminDashboard/category" element={<Categories />} />
-          <Route path="/AdminDashboard/product" element={<Products />} />
-          <Route path="/AdminDashboard/user" element={<Users />} />
-          <Route path="/AdminDashboard/sales" element={<Sales />} />
-          <Route path="/AdminDashboard/ordersAdmin" element={<OrderAdmin />} />
+          <Route path="/offers" element={<Offers />} />
+          
+          {/* Protected Routes for Admin */}
+          <Route element={<ProtectedRoute requiredRole="admin" />}>
+            <Route path="/admin-dashboard" element={<AdminDashboard />} />
+            <Route path="/admin-dashboard/category" element={<Categories />} />
+            <Route path="/admin-dashboard/product" element={<Products />} />
+            <Route path="/admin-dashboard/user" element={<Users />} />
+            <Route path="/admin-dashboard/sales" element={<Sales />} />
+            <Route path="/admin-dashboard/ordersAdmin" element={<OrderAdmin />} />
+          </Route>
+          
+          {/* Protected Routes for Authenticated Users */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/OrderedForm" element={<OrderedForm />} />
+            <Route path="/account/orders" element={<Orders />} />
+            <Route path="/account/account-details" element={<AccountDetails />} />
+            <Route path="/account/address" element={<Address />} />
+            <Route path="/account" element={<Account />} />
+          </Route>
         </Routes>
         <Footer />
       </div>

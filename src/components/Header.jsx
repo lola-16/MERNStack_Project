@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import './css/Header.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
@@ -8,16 +8,21 @@ import { increaseQuantity, decreaseQuantity, removeProduct } from '../Rtk/Slices
 
 const Header = () => {
   const dispatch = useDispatch();
-  const cartItems = useSelector(state => state.cart.cartItems);
-  const total = useSelector(state => state.cart.total);
-  
-  const shipping = 40; // Fixed shipping
+  const cartItems = useSelector((state) => state.cart.cartItems);
+  const total = useSelector((state) => state.cart.total);
+  const currentUser = useSelector((state) => state.auth.user); // Assuming you store user info in auth state
+  const [isOfferActivated, setIsOfferActivated] = useState(false);
+
+  const shipping = isOfferActivated ? 0 : 40;
   const uniqueProductCount = cartItems.length;
 
-  // Memoize the total calculation
   const totalWithShipping = useMemo(() => {
     return total < 350 ? total + shipping : total;
   }, [total, shipping]);
+
+  const activateOffer = () => {
+    setIsOfferActivated(true);
+  };
 
   return (
     <>
@@ -32,7 +37,7 @@ const Header = () => {
             <Navbar.Collapse id="navbar-nav" className="justify-content-center">
               <Nav className="nav-links">
                 <NavDropdown title="رجالي" id="men-dropdown">
-                  <NavDropdown.Item as={Link} to="/menShoe">أحذية رجالي</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/men-Shoe">أحذية رجالي</NavDropdown.Item>
                   <NavDropdown.Item as={Link} to="/category/2">شراب انكل رجالي</NavDropdown.Item>
                   <NavDropdown.Item as={Link} to="/category/1">شراب طويل رجالي</NavDropdown.Item>
                   <NavDropdown.Item as={Link} to="/category/6">شراب غير ظاهر رجالي</NavDropdown.Item>
@@ -68,7 +73,9 @@ const Header = () => {
                   </span>
                 )}
               </Link>
-              <Link className="link-admin" to="/AdminDashboard">admin</Link>
+              {currentUser?.isAdmin && ( 
+                <Link className="link-admin" to="/admin-dashboard">admin</Link>
+              )}
               <Link className="icon" to="/Fav"><FaHeart /></Link>
               <Link className="icon" to="/Login"><FaUser /></Link>
             </div>
@@ -76,6 +83,7 @@ const Header = () => {
         </Navbar>
       </header>
 
+      {/* Modal for Cart */}
       <div className="modal fade" id="cart" tabIndex={-1} aria-labelledby="cartname" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
@@ -90,57 +98,59 @@ const Header = () => {
                 cartItems.map((item) => (
                   <div key={item.id} className="d-flex gap-3 mb-2 align-items-center">
                     <div className="d-flex gap-1 align-items-center">
-                      <button type="button" className="btn-close" aria-label="Close" onClick={() => dispatch(removeProduct(item.id))} />
-                      <img src={item.image} alt={item.name} title={item.name} style={{ width: "90px", height: "90px", borderRadius: "0" }} />
+                      <button
+                        type="button"
+                        className="btn-close"
+                        aria-label="Close"
+                        onClick={() => dispatch(removeProduct(item.id))}
+                      />
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        title={item.name}
+                        style={{ width: "90px", height: "90px", borderRadius: "0" }}
+                      />
                       <div>
                         <h4>{item.name}</h4>
                         <p>{item.price} جنيه</p>
                       </div>
                     </div>
                     <div className="quantites d-flex gap-1 p-0 bg-body-secondary">
-                      <span className="decrease p-2" onClick={() => dispatch(decreaseQuantity(item.id))}>-</span>
+                      <span
+                        className="decrease p-2"
+                        onClick={() => dispatch(decreaseQuantity(item.id))}
+                      >
+                        -
+                      </span>
                       <span className="quantity p-2 border px-3">{item.quantity}</span>
-                      <span className="increase p-2" onClick={() => dispatch(increaseQuantity(item.id))}>+</span>
+                      <span
+                        className="increase p-2"
+                        onClick={() => dispatch(increaseQuantity(item.id))}
+                      >
+                        +
+                      </span>
                     </div>
                   </div>
                 ))
               )}
 
-              <div className="row">
-                <div className="col-10">
-                  {total < 100 && (
-                    <p>الحد الأدنى للطلب هو 100.00 جنيه - برجاء إضافة المزيد من المنتجات للسلة</p>
-                  )}
-                </div>
-              </div>
-              <div className="d-flex justify-content-between">
+              <div className="d-flex justify-content-between my-3">
                 <span>المجموع</span>
-                <span className='fs-6 fw-bold'>{total} جنيه</span>
+                <span>{total} جنيه</span>
               </div>
-              <div className="d-flex justify-content-between text-danger fs-6 my-2 fw-bold">
+              <div className="d-flex justify-content-between my-3">
                 <span>الشحن</span>
                 <span>{shipping} جنيه</span>
               </div>
-              <div>
-                {total < 350 && (
-                  <p>احصل على شحن مجاني بعد {350 - total} جنيه!</p>
-                )}
-              </div>
-              <div className="progress" style={{ backgroundColor: "#ecd4e5" }} role="progressbar" aria-label="Default striped example" aria-valuenow={(total / 350) * 100} aria-valuemin={0} aria-valuemax={100}>
-                <div className="progress-bar progress-bar-striped" style={{ width: `${(total / 350) * 100}%`, backgroundColor: "#95578a" }} />
-              </div>
-
-              {total < 350 && (
-                <p className="mt-2">أضف {350 - total} جنيه إلى سلة التسوق للحصول على شحن مجاني!</p>
-              )}
-
-              <div className="d-flex justify-content-between my-3">
+              <div className="d-flex justify-content-between my-3 fw-bold">
                 <span>الإجمالي</span>
                 <span>{totalWithShipping} جنيه</span>
               </div>
 
               <div className="w-100">
-                <Link to="/OrderedForm" className="btn w-100 btn_order">اتمام الطلب</Link>
+                <Link to="/OrderedForm" className="btn w-100 btn_order">
+                  اتمام الطلب
+                </Link>
               </div>
               <div className="text-center my-3">
                 <Link to="/category/all">مزيد من التسوق</Link>
