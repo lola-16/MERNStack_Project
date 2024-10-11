@@ -28,16 +28,17 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser } from './Rtk/Slices/Auth';
 
+
 function App() {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
-  
+
   useEffect(() => {
     if (token) {
       dispatch(fetchUser());
     }
   }, [dispatch, token]);
-  
+
   return (
     <Router>
       <div className="App">

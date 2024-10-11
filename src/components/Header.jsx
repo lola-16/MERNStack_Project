@@ -5,15 +5,17 @@ import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FaShoppingCart, FaHeart, FaUser } from 'react-icons/fa';
 import { increaseQuantity, decreaseQuantity, removeProduct } from '../Rtk/Slices/CartSlice';
+import Swal from 'sweetalert2'; 
 
 const Header = () => {
   const dispatch = useDispatch();
-  const cartItems = useSelector((state) => state.cart.cartItems);
-  const total = useSelector((state) => state.cart.total);
-  const currentUser = useSelector((state) => state.auth.user); // Assuming you store user info in auth state
-  const [isOfferActivated, setIsOfferActivated] = useState(false);
+  const cartItems = useSelector(state => state.cart.cartItems);
+  const total = useSelector(state => state.cart.total);
+  const currentUser = useSelector(state => state.auth.user);
+  const favoritesCount = useSelector(state => state.favorites.favoriteItems.length);
 
-  const shipping = isOfferActivated ? 0 : 40;
+  const [isOfferActivated, setIsOfferActivated] = useState(false);
+  const shipping = isOfferActivated ? 0 : 40; // Dynamic shipping based on the offer
   const uniqueProductCount = cartItems.length;
 
   const totalWithShipping = useMemo(() => {
@@ -60,7 +62,7 @@ const Header = () => {
                   <NavDropdown.Item as={Link} to="/category/14">اطفالي بناتي (من 9 سنين ل 12 سنين)</NavDropdown.Item>
                 </NavDropdown>
 
-                <Link to="/Offers" className="offers">العروض</Link>
+                <Link to="/offers" className="offers">العروض</Link>
                 <Link to="/category/all" className="offers">الجميع</Link>
               </Nav>
             </Navbar.Collapse>
@@ -73,10 +75,17 @@ const Header = () => {
                   </span>
                 )}
               </Link>
-              {currentUser?.isAdmin && ( 
+              {currentUser?.isAdmin && (
                 <Link className="link-admin" to="/admin-dashboard">admin</Link>
               )}
-              <Link className="icon" to="/Fav"><FaHeart /></Link>
+              <Link className="icon position-relative" to="/Fav">
+                <FaHeart />
+                {favoritesCount > 0 && (
+                  <span className="position-absolute top-0 start-100 translate-middle wishQuantity">
+                    {favoritesCount}
+                  </span>
+                )}
+              </Link>
               <Link className="icon" to="/Login"><FaUser /></Link>
             </div>
           </Container>
@@ -95,8 +104,8 @@ const Header = () => {
               {cartItems.length === 0 ? (
                 <p>سلة التسوق فارغة</p>
               ) : (
-                cartItems.map((item) => (
-                  <div key={item.id} className="d-flex gap-3 mb-2 align-items-center">
+                cartItems.map(item => (
+                  <div key={item.id} className="d-flex gap-3 mb-2 align-items-center justify-content-between">
                     <div className="d-flex gap-1 align-items-center">
                       <button
                         type="button"
@@ -116,19 +125,9 @@ const Header = () => {
                       </div>
                     </div>
                     <div className="quantites d-flex gap-1 p-0 bg-body-secondary">
-                      <span
-                        className="decrease p-2"
-                        onClick={() => dispatch(decreaseQuantity(item.id))}
-                      >
-                        -
-                      </span>
+                      <span className="decrease p-2" onClick={() => dispatch(decreaseQuantity(item.id))}>-</span>
                       <span className="quantity p-2 border px-3">{item.quantity}</span>
-                      <span
-                        className="increase p-2"
-                        onClick={() => dispatch(increaseQuantity(item.id))}
-                      >
-                        +
-                      </span>
+                      <span className="increase p-2" onClick={() => dispatch(increaseQuantity(item.id))}>+</span>
                     </div>
                   </div>
                 ))
@@ -148,9 +147,7 @@ const Header = () => {
               </div>
 
               <div className="w-100">
-                <Link to="/OrderedForm" className="btn w-100 btn_order">
-                  اتمام الطلب
-                </Link>
+                <Link to="/OrderedForm" className="btn w-100 btn_order">اتمام الطلب</Link>
               </div>
               <div className="text-center my-3">
                 <Link to="/category/all">مزيد من التسوق</Link>

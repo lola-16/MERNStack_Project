@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import Swal from 'sweetalert2';
 
 // Load cart items from local storage if they exist
 const loadCartFromLocalStorage = () => {
@@ -43,6 +44,14 @@ const cartSlice = createSlice({
       if (existingProduct) {
         existingProduct.quantity += 1;
       } else {
+        // Use SweetAlert instead of alert
+        Swal.fire({
+          icon: 'success',
+          title: 'Product added!',
+          text: `${product.name} has been added to your cart.`,
+          timer: 1500,
+          showConfirmButton: false,
+        });
         state.cartItems.push({ ...product, quantity: 1 });
       }
 

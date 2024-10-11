@@ -140,7 +140,7 @@ const Login = () => {
 
                     <Link to="/register" className="text-center d-block mt-3">مستخدم جديد؟ تسجيل حساب</Link>
                 </form>
-            </div>
+            </div> 
         </div>
     );
 };

@@ -74,12 +74,16 @@ exports.getProductsByCategory = async (req, res) => {
 // Get all products
 exports.getAllProducts = async (req, res) => {
     try {
+        console.log('Fetching all products...');
         const products = await Product.find();
+        console.log('Fetched products:', products);
         res.status(200).json(products);  
     } catch (error) {
+        console.error('Error fetching all products:', error);
         res.status(400).json({ error: error.message });
     }
 };
+
 
 // Get a product by ID
 exports.getProduct = async (req, res) => {

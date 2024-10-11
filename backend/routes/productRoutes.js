@@ -35,13 +35,14 @@ const upload = multer({
 });
 
 // Public route - no token required
-router.get('/products', productController.getAllProducts);
+
 
 // Protected routes - token required
 router.post('/products', authenticateToken, upload.single('image'), productController.createProduct); 
-router.get('/products/category/:categoryNumber', authenticateToken, productController.getProductsByCategory);
-router.get('/products/:id', authenticateToken, productController.getProduct);
-router.put('/products/:id', authenticateToken, upload.single('image'), productController.updateProduct);
+router.get('/products/category/:categoryNumber', productController.getProductsByCategory);
+router.get('/products/:id', productController.getProduct);
+router.get('/products', productController.getAllProducts);
+router.put('/products/:id', upload.single('image'), productController.updateProduct);
 router.delete('/products/:id', authenticateToken, productController.deleteProduct);
 
 module.exports = router;
