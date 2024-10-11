@@ -129,9 +129,34 @@
 .cartQuantity{
   color: #ffffff;
   background-color: #d9534f;
-  padding: 7px;
+  padding: 4px;
   font-size: 10px;
   border-radius: 50%;
-  width: 28px;
+  width: 20px;
+  height: 20px;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wishQuantity{
+  color: #ffffff;
+  background-color: #d9534f;
+  padding: 4px;
+  font-size: 10px;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.heart {
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.heart.favorited {
+  color: red;
 }

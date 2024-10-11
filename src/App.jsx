@@ -1,4 +1,4 @@
-import React from 'react';
+import React  , {useEffect} from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -23,9 +23,16 @@ import Products from './components/Product';
 import Users from './components/Users';
 import Sales from './components/Sales';
 import OrderAdmin from './components/OrderAdmin';
+// import { useDispatch } from 'react-redux';
+// import { loadFavoritesFromStorage } from './Rtk/Slices/favSlice';
 
 /* eslint-disable*/
 function App() {
+  // const dispatch =useDispatch();
+
+  //  useEffect(() => {
+  //   dispatch(loadFavoritesFromStorage());
+  // }, [dispatch]);
   return (
     <Router>
       <div className="App">

@@ -10,16 +10,22 @@ const Header = () => {
   const dispatch = useDispatch();
   const cartItems = useSelector(state => state.cart.cartItems);
   const total = useSelector(state => state.cart.total);
-  
+
   const shipping = 40; // Fixed shipping
   const uniqueProductCount = cartItems.length;
+
+  // const favorites = useSelector(state => state.favorites.favorites);
+  // const uniqueProductCount2 = favorites.length;
 
   // Memoize the total calculation
   const totalWithShipping = useMemo(() => {
     return total < 350 ? total + shipping : total;
   }, [total, shipping]);
+  const favoritesCount = useSelector(state => state.favorites.favoriteItems.length);
+
 
   return (
+
     <>
       <header className="header">
         <div className="top-bar">
@@ -69,7 +75,14 @@ const Header = () => {
                 )}
               </Link>
               <Link className="link-admin" to="/AdminDashboard">admin</Link>
-              <Link className="icon" to="/Fav"><FaHeart /></Link>
+              <Link className="icon position-relative" to="/Fav">
+                <FaHeart />
+                {favoritesCount > 0 && (
+                  <span className="position-absolute top-0 start-100 translate-middle wishQuantity">
+                    {favoritesCount}
+                  </span>
+                )}
+              </Link>
               <Link className="icon" to="/Login"><FaUser /></Link>
             </div>
           </Container>
@@ -88,7 +101,7 @@ const Header = () => {
                 <p>سلة التسوق فارغة</p>
               ) : (
                 cartItems.map((item) => (
-                  <div key={item.id} className="d-flex gap-3 mb-2 align-items-center">
+                  <div key={item.id} className="d-flex gap-3 mb-2 align-items-center justify-content-between">
                     <div className="d-flex gap-1 align-items-center">
                       <button type="button" className="btn-close" aria-label="Close" onClick={() => dispatch(removeProduct(item.id))} />
                       <img src={item.image} alt={item.name} title={item.name} style={{ width: "90px", height: "90px", borderRadius: "0" }} />
