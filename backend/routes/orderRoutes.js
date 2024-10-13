@@ -1,20 +1,24 @@
 const express = require('express');
 const router = express.Router();
 const orderController = require('../controllers/orderController');
-
+const authMiddleware = require('../middlewares/authMiddleware');
+const authorizeRoles = require('../middlewares/authorizeRoles');
 // Create Order
 router.post('/orders', orderController.createOrder);
 
 // Get Order by ID
-router.get('/orders/:id', orderController.getOrder);
+router.get('/orders', authMiddleware, orderController.getUserOrders); // Updated route
 
 // Update Order
-router.put('/orders/:id', orderController.updateOrder);
+router.put('/orders/:id', authMiddleware, authorizeRoles('admin'), orderController.updateOrder);
 
 // Delete Order
-router.delete('/orders/:id', orderController.deleteOrder);
+router.delete('/orders/:id', authMiddleware, orderController.deleteOrder);
 
 // Get All Orders
-router.get('/orders', orderController.getAllOrders);
+router.get('/ordersall', authMiddleware, authorizeRoles('admin'), orderController.getAllOrders);
+
+router.put('/orders/submit/:id', authMiddleware, authorizeRoles('admin'), orderController.confirmOrder);
+
 
 module.exports = router;

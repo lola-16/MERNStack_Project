@@ -11,19 +11,20 @@ router.post('/register', userController.createUser);
 router.post('/login', userController.loginUser);
 
 // Get All Users (Protected, Admin Only)
-router.get('/', authMiddleware, authorizeRoles('admin'), userController.getAllUsers);
+router.get('/users', authMiddleware, authorizeRoles('admin'), userController.getAllUsers);
 
-// Get Single User (Protected, Self or Admin)
-router.get('/:id', authMiddleware, userController.getUser);
+
+router.get('/users/:id', authMiddleware, userController.getUser);
 
 // Update User (Protected, Self or Admin)
-router.put('/:id', authMiddleware, userController.updateUser);
+router.put('/users/:id', authMiddleware, userController.updateUser);
 
-// Delete User (Protected, Admin Only)
+// Delete User (Protected, Admin Only) 
 router.delete('/:id', authMiddleware, authorizeRoles('admin'), userController.deleteUser);
 
 // Get Current User (Protected, Self Only)
 router.get('/me', authMiddleware, userController.getCurrentUser);
 
+router.put('/users/:id/password', authMiddleware,userController.updatePassword );
 
 module.exports = router;

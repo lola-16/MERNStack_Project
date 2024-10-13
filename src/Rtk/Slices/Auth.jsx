@@ -1,11 +1,11 @@
-// Auth.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { clearCart, loadCart } from './CartSlice'; // Import clearCart action
 
-// إعدادات Axios
-axios.defaults.baseURL = 'http://localhost:8080'; // تأكد من صحة عنوان الـ API الخاص بك
+// Axios configuration
+axios.defaults.baseURL = 'http://localhost:8080'; // Ensure the API endpoint is correct
 
-// الحالة الابتدائية
+// Initial state
 const initialState = {
     user: null,
     token: localStorage.getItem('token') || null,
@@ -13,7 +13,7 @@ const initialState = {
     error: null,
 };
 
-// تعريف registerUser
+// Define registerUser action
 export const registerUser = createAsyncThunk(
     'auth/registerUser',
     async (userData, { rejectWithValue }) => {
@@ -21,30 +21,36 @@ export const registerUser = createAsyncThunk(
             const response = await axios.post('/api/register', userData);
             return response.data;
         } catch (err) {
-            return rejectWithValue(err.response.data);
+            return rejectWithValue(err.response?.data || { message: 'Registration error' });
         }
     }
 );
 
-// تعريف loginUser
+// Define loginUser action
 export const loginUser = createAsyncThunk(
     'auth/loginUser',
-    async (credentials, { rejectWithValue }) => {
+    async (credentials, { rejectWithValue, dispatch }) => {
         try {
             const response = await axios.post('/api/login', credentials);
-            const { token, user } = response.data;
+            console.log('Login response:', response.data); // Log the response
+            const { token, user, cart } = response.data; // Assuming cart comes from the response
 
             // Save token to localStorage
             localStorage.setItem('token', token);
 
-            return { token, user };
+            // Dispatch loadCart action
+            dispatch(loadCart(cart)); // Load the user's cart after login
+
+            return { token, user }; // Return token and user info
         } catch (error) {
-            return rejectWithValue(error.response.data);
+            console.error('Login error:', error); // Log the full error
+            // Provide a more descriptive error message
+            return rejectWithValue(error.response?.data?.message || 'Login failed. Please try again.');
         }
     }
 );
 
-// تعريف fetchUser
+// Define fetchUser action
 export const fetchUser = createAsyncThunk(
     'auth/fetchUser',
     async (_, { getState, rejectWithValue }) => {
@@ -57,16 +63,17 @@ export const fetchUser = createAsyncThunk(
             });
             return response.data;
         } catch (err) {
-            return rejectWithValue(err.response.data);
+            return rejectWithValue(err.response?.data || { message: 'Failed to fetch user' });
         }
     }
 );
 
-// إنشاء Slice
+// Create Slice
 const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
+        // Logout action to clear user and token
         logout(state) {
             state.user = null;
             state.token = null;
@@ -83,11 +90,11 @@ const authSlice = createSlice({
             state.loading = false;
             state.user = action.payload.user;
             state.token = action.payload.token;
-            localStorage.setItem('token', action.payload.token);
+            localStorage.setItem('token', action.payload.token); // Save token to localStorage
         });
         builder.addCase(registerUser.rejected, (state, action) => {
             state.loading = false;
-            state.error = action.payload.message || 'Registration failed';
+            state.error = action.payload?.message || 'Registration failed'; // Safe access
         });
 
         // loginUser
@@ -99,10 +106,11 @@ const authSlice = createSlice({
             state.loading = false;
             state.user = action.payload.user;
             state.token = action.payload.token;
+            localStorage.setItem('token', action.payload.token); // Save token to localStorage
         });
         builder.addCase(loginUser.rejected, (state, action) => {
             state.loading = false;
-            state.error = action.payload.message || 'Login failed';
+            state.error = action.payload?.message || 'Login failed'; // Safe access
         });
 
         // fetchUser
@@ -116,10 +124,11 @@ const authSlice = createSlice({
         });
         builder.addCase(fetchUser.rejected, (state, action) => {
             state.loading = false;
-            state.error = action.payload.message || 'Failed to fetch user';
+            state.error = action.payload?.message || 'Failed to fetch user'; // Safe access
         });
     },
 });
 
+// Export actions and reducer
 export const { logout } = authSlice.actions;
 export default authSlice.reducer;

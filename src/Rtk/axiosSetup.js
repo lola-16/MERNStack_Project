@@ -2,10 +2,7 @@ import axios from 'axios';
 import store from './Store';
 import { logout } from './Slices/Auth';
 
-// Set the base URL for Axios (ensure it's the same as in AuthSlice)
-axios.defaults.baseURL = 'http://localhost:8080'; // Replace with your backend URL
-
-// Request interceptor to add token to headers
+axios.defaults.baseURL = 'http://localhost:8080'; 
 axios.interceptors.request.use(
     (config) => {
         const state = store.getState();

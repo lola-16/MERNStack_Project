@@ -1,15 +1,31 @@
-// src/components/Sales.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const Sales = () => {
-    const [sales, setSales] = useState([
-        { id: 1, product: 'Smartphone', amount: 699, date: '2024-04-10', quantity: 1 },
-        { id: 2, product: 'Laptop', amount: 1299, date: '2024-04-11', quantity: 2 },
-        { id: 3, product: 'Tablet', amount: 499, date: '2024-04-12', quantity: 3 },
-        // Add more sales as needed
-    ]);
+    const [sales, setSales] = useState([]);
 
-    const totalRevenue = sales.reduce((total, sale) => total + sale.amount, 0);
+    useEffect(() => {
+        const fetchSales = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await axios.get('http://localhost:8080/api/sales', { // Make sure you're calling the correct endpoint
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    }
+                });
+                console.log('Fetched sales:', response.data); // Check what data is fetched
+                const submittedSales = response.data.filter(sale => sale.orderId); // Adjust this line based on your response structure
+                setSales(submittedSales);
+            } catch (err) {
+                console.error('Error fetching sales:', err);
+            }
+        };
+        
+
+        fetchSales();
+    }, []);
+
+    const totalRevenue = sales.reduce((total, sale) => total + sale.totalAmount, 0);
     const totalSales = sales.length;
 
     return (
@@ -22,21 +38,20 @@ const Sales = () => {
             <table>
                 <thead>
                     <tr>
-                        <th>Sale ID</th>
-                        <th>Product</th>
-                        <th>Amount ($)</th>
-                        <th>Quantity</th>
-                        <th>Date</th>
+                        <th>رقم العملية</th>
+                        <th>اسم المنتج</th>
+                        <th>اجمالي البيع</th>
+                        <th>الكمية</th>
                     </tr>
                 </thead>
                 <tbody>
                     {sales.map(sale => (
-                        <tr key={sale.id}>
-                            <td>{sale.id}</td>
-                            <td>{sale.product}</td>
-                            <td>{sale.amount}</td>
-                            <td>{sale.quantity}</td>
-                            <td>{sale.date}</td>
+                        <tr key={sale.orderId}>
+                            <td>{sale.orderId}</td>
+                            <td>{sale.products.map(p => p.productName).join(', ')}</td>
+                            <td>{sale.totalAmount}</td>
+                            <td>{sale.products.reduce((total, p) => total + p.quantity, 0)}</td>
+                            <td>{new Date(sale.orderDate).toLocaleString()}</td>
                         </tr>
                     ))}
                 </tbody>

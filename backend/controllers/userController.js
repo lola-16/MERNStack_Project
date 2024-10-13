@@ -119,32 +119,18 @@ exports.loginUser = async (req, res) => {
 };
 
 // Update a user
+// Update User
 exports.updateUser = async (req, res) => {
+    const { id } = req.params;
+    const updatedData = req.body;
     try {
-        const requestedUserId = req.params.id;
-        const authenticatedUser = req.user;
-
-        // Allow update if the user is updating their own data or is an admin
-        if (authenticatedUser.userId !== requestedUserId && authenticatedUser.role !== 'admin') {
-            return res.status(403).json({ message: 'Forbidden: You do not have access to update this user.' });
+        const user = await User.findByIdAndUpdate(id, updatedData, { new: true });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
         }
-
-        // If password is being updated, hash it
-        if (req.body.password) {
-            req.body.password = await bcrypt.hash(req.body.password, 10);
-        }
-
-        const updatedUser = await User.findOneAndUpdate(
-            { userId: requestedUserId },
-            req.body,
-            { new: true, runValidators: true, context: 'query' }
-        ).select('-password');
-
-        if (!updatedUser) return res.status(404).json({ message: 'User not found' });
-
-        res.status(200).json(updatedUser);
+        res.status(200).json(user);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(500).json({ message: "Server error" });
     }
 };
 
@@ -163,8 +149,6 @@ exports.getUser = async (req, res) => {
     try {
         const userId = req.params.id;
         const authenticatedUser = req.user;
-
-        // Allow access if user is trying to get their own data or is an admin
         if (authenticatedUser.userId !== userId && authenticatedUser.role !== 'admin') {
             return res.status(403).json({ message: 'Forbidden: You do not have access to this user.' });
         }
@@ -195,5 +179,30 @@ exports.getCurrentUser = async (req, res) => {
         });
     } catch (error) {
         res.status(500).json({ message: 'Error fetching user' });
+    }
+};
+
+exports.updatePassword = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { oldPassword, newPassword } = req.body;
+
+        const user = await User.findById(id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const isMatch = await user.comparePassword(oldPassword);
+        if (!isMatch) {
+            return res.status(400).json({ message: 'Old password is incorrect' });
+        }
+
+        user.password = newPassword;
+        await user.save();
+
+        res.json({ message: 'Password updated successfully' });
+    } catch (error) {
+        console.error('Error updating password:', error);
+        res.status(500).json({ message: 'Server error' });
     }
 };

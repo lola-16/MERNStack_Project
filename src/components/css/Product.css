@@ -1,150 +1,86 @@
-/* src/components/Products.css */
-
-/* General Styles */
-.cont {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    width: 100%;
-    margin-top: 50px;
-}
-
-/* Title */
-h1 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #750d5f;
-    /* Dark purple color for titles */
-}
-
-/* Form Styles */
-.cont form {
-    background-color: #ffffff;
-    border-radius: 8px;
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-    width: 50%;
 }
 
-.cont .form-group {
+.product-form {
+    margin-bottom: 20px;
+}
+
+.form-group {
     margin-bottom: 15px;
 }
 
-.cont label {
-    display: block;
-    margin-bottom: 5px;
-    color: #333;
-    /* Dark gray for labels */
+.product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
 }
 
-.cont input[type="text"],
-.cont input[type="number"] {
-    width: 100%;
-    padding: 10px;
+.product-card {
+    background-color: #f8f9fa;
+    padding: 20px;
     border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 16px;
-}
-
-.cont input[type="text"]:focus,
-.cont input[type="number"]:focus {
-    border-color: #750d5f;
-    /* Purple focus border */
-    outline: none;
-    /* Remove outline */
-}
-
-/* Button Styles */
-.cont button {
-    background-color: #750d5f;
-    /* Dark purple background */
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-right: 10px;
-    /* Space between buttons */
-    transition: background 0.3s;
-}
-
-button:hover {
-    background-color: #9b66aa;
-    /* Lighter purple on hover */
-}
-
-/* Table Styles */
-/* Responsive Table Styles */
-/* General Table Layout */
-/* src/components/Products.css */
-
-/* Table Styles */
-table {
-    width: 100%;
-    table-layout: fixed; /* Ensures equal width for each column */
-    border-collapse: collapse;
-    margin-top: 20px;
-    overflow-x: auto; /* Enable horizontal scrolling on smaller screens */
-}
-
-th, td {
-    width: 15%; /* Adjusted for more columns */
-    text-align: center;
-    white-space: nowrap; /* Prevent text wrapping */
-}
-
-/* Description styling for truncation */
-td:nth-child(9) {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis; /* Ensures truncation of text */
-}
-
-/* Image Styling */
-.image-cont img {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-}
-
-/* Form Styling */
-form {
+    border-radius: 8px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin-bottom: 20px;
+    justify-content: space-between;
 }
 
-/* Action Buttons */
-.action-buttons button {
-    margin: 0 5px;
+.product-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
 }
 
-.delete {
-    background-color: red;
+.product-card h3 {
+    margin: 10px 0;
+    font-size: 1.2rem;
+}
+
+.product-card p {
+    margin: 5px 0;
+    font-size: 1rem;
+}
+
+.product-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.edit-btn, .delete-btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.edit-btn {
+    background-color: #6900e1;
     color: white;
 }
-th{
-    background-color: #9b66aa;
+
+.delete-btn {
+    background-color: #dc3545;
+    color: white;
 }
 
-/* Media Query for Smaller Screens */
-@media (max-width: 768px) {
-    table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
+.edit-btn:hover {
+    background-color: #7a00b3;
+}
 
-    .prod th,.prod td {
-        display: inline-block;
-        width: 18%;
-    }
-    .cont form{
-        width: 90%;
-    }
-    
+.delete-btn:hover {
+    background-color: #c82333;
+}
+
+
+.search-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }

@@ -4,7 +4,7 @@ const multer = require('multer');
 const path = require('path');
 const productController = require('../controllers/productController');
 const authenticateToken = require('../middlewares/authMiddleware'); 
-
+const authorizeRoles = require('../middlewares/authorizeRoles');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -38,11 +38,11 @@ const upload = multer({
 
 
 // Protected routes - token required
-router.post('/products', authenticateToken, upload.single('image'), productController.createProduct); 
+router.post('/products', authenticateToken, authorizeRoles('admin'), upload.single('image'), productController.createProduct); 
 router.get('/products/category/:categoryNumber', productController.getProductsByCategory);
 router.get('/products/:id', productController.getProduct);
 router.get('/products', productController.getAllProducts);
-router.put('/products/:id', upload.single('image'), productController.updateProduct);
-router.delete('/products/:id', authenticateToken, productController.deleteProduct);
+router.put('/products/:id', authenticateToken, authorizeRoles('admin'), upload.single('image'), productController.updateProduct);
+router.delete('/products/:id', authenticateToken, authorizeRoles('admin'), productController.deleteProduct);
 
 module.exports = router;

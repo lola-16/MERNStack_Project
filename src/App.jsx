@@ -68,7 +68,7 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path="/OrderedForm" element={<OrderedForm />} />
             <Route path="/account/orders" element={<Orders />} />
-            <Route path="/account/account-details" element={<AccountDetails />} />
+            <Route path="/account/AccountDetails" element={<AccountDetails />} />
             <Route path="/account/address" element={<Address />} />
             <Route path="/account" element={<Account />} />
           </Route>

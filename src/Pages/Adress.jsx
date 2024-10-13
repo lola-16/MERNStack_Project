@@ -1,27 +1,83 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Col, Container, Nav, Row, Form, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUser } from '../Rtk/Slices/Auth'; 
+import axios from 'axios';
+import Swal from 'sweetalert2'; 
 
 export default function Address() {
+    const dispatch = useDispatch();
+    const { user, token } = useSelector((state) => state.auth); 
     const [name, setName] = useState("");
-    const [city, setCity] = useState("");
     const [address, setAddress] = useState("");
     const [phone, setPhone] = useState("");
 
-    const handleSubmit = (e) => {
+    useEffect(() => {
+        if (token) {
+            dispatch(fetchUser());
+        }
+    }, [dispatch, token]);
+
+    // Fetch current user details after the user has been fetched
+    useEffect(() => {
+        const fetchCurrentUser = async () => {
+            if (user) { // Check if user is available
+                setName(user.username || "");
+                setAddress(user.address || "");
+                setPhone(user.contact || ""); 
+            }
+            console.log('User from Redux:', user); // Log user from Redux
+        };
+        fetchCurrentUser();
+    }, [user]); // Only run this effect when the user object changes
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log({ name, city, address, phone });
+        console.log('Submitting form...');
+
+        if (user && user.id) { // Change from user._id to user.id
+            const updatedUser = { username: name, address, contact: phone };
+            console.log('Updating user with data:', updatedUser);
+
+            try {
+                const response = await axios.put(`http://localhost:8080/api/users/${user.id}`, updatedUser, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                Swal.fire({
+                    icon: 'success',
+                    title: 'تم تحديث المعلومات بنجاح',
+                    text: 'تم تحديث معلوماتك الشخصية بنجاح!'
+                });
+            } catch (error) {
+                console.error('Error updating user:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'حدث خطأ',
+                    text: 'فشل تحديث معلوماتك. حاول مرة أخرى لاحقًا.'
+                });
+            }
+        } else {
+            console.error('User or User ID is missing');
+            console.log('User ID:', user ? user.id : 'No user available'); // Log the correct ID
+        }
     };
+
+    if (!user) {
+        return <div>Loading...</div>; // Loading state if user data is not available
+    }
 
     return (
         <Container className="my-5">
-            <Row>
+            <Row className="g-4">
                 <Col md={3}>
                     <div className="sidebar">
                         <div className="user-info mb-4">
                             <div className="d-flex align-items-center">
                                 <div className="ms-2">
-                                    <strong>monadewidar02</strong>
+                                    <strong>{name}</strong>
                                 </div>
                             </div>
                         </div>
@@ -45,16 +101,6 @@ export default function Address() {
                                     placeholder="أدخل اسمك"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
-                                    required
-                                />
-                            </Form.Group>
-                            <Form.Group className="mb-3" controlId="city">
-                                <Form.Label>المدينة</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="أدخل مدينتك"
-                                    value={city}
-                                    onChange={(e) => setCity(e.target.value)}
                                     required
                                 />
                             </Form.Group>

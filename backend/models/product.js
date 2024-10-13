@@ -1,17 +1,18 @@
 const mongoose = require('mongoose');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
-const Category = require("./category");
 
 const productSchema = new mongoose.Schema({
     productId: { type: Number, unique: true },
     image: { type: String, required: true }, 
     name: { type: String, required: true },
-    price: { type: Number, required: true },
-    category: { type: Number, ref: 'Category' },
+    newPrice: { type: Number, required: true }, // Changed price to newPrice
+    deletedPrice: { type: Number }, // Previous price (optional)
+    category: { type: Number, ref: 'Category', required: true }, // Category reference
     stock: { type: Number, required: true },
     description: { type: String },
-    deletedPrice: { type: Number },
-    rating: { type: Number, default: 0 }
+    offer: { type: String }, // Additional field for offers
+    rating: { type: Number, default: 0 },
+    rate: { type: Number, default: 0 }, // Customer rating
 });
 
 productSchema.plugin(AutoIncrement, { inc_field: 'productId', start_seq: 1 });

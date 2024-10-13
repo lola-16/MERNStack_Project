@@ -20,7 +20,7 @@ const Header = () => {
 
   const totalWithShipping = useMemo(() => {
     return total < 350 ? total + shipping : total;
-  }, [total, shipping]);
+  }, [total, shipping]); 
 
   const activateOffer = () => {
     setIsOfferActivated(true);

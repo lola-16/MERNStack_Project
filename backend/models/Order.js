@@ -4,12 +4,20 @@ const AutoIncrement = require('mongoose-sequence')(mongoose);
 const orderSchema = new mongoose.Schema({
     orderId: { type: Number, unique: true },
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    name: { type: String, required: true },
+    email: { type: String, required: true },
+    address: { type: String, required: true },
+    phone: { type: String, required: true },
+    notes: { type: String },
+    paymentMethod: { type: String, required: true },
     products: [{ 
-        product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+        product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
         quantity: { type: Number, required: true }
     }],
     totalAmount: { type: Number, required: true },
-    orderDate: { type: Date, default: Date.now }
+    shipping: { type: Number, required: true, default: 40 },
+    orderDate: { type: Date, default: Date.now },
+    isSubmitted: { type: Boolean, default: false } 
 });
 
 orderSchema.plugin(AutoIncrement, { inc_field: 'orderId', start_seq: 1 });

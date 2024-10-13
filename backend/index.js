@@ -8,6 +8,7 @@ const orderRoutes = require('./routes/orderRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const offerRoutes = require('./routes/offerRoutes');
+const saleRouter=require('./routes/saleRouter')
 const cors = require('cors');
 const authenticateToken = require('./middlewares/authMiddleware');
 const notFoundHandler = require('./middlewares/notFoundMiddleware');
@@ -19,7 +20,7 @@ const app = express();
 
 // CORS Configuration
 const corsOptions = {
-    origin: 'http://localhost:3000', // Adjust if your client is running on a different port
+    origin: 'http://localhost:3000', 
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
@@ -27,10 +28,9 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// Middleware to parse JSON
-app.use(express.json()); // No need for body-parser separately
 
-// Serve static files from 'uploads' directory
+app.use(express.json()); 
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Use all routes
@@ -41,7 +41,7 @@ app.use('/api', orderRoutes);
 app.use('/api', reviewRoutes);
 app.use('/api', cartRoutes);
 app.use('/api', offerRoutes);
-
+app.use('/api',saleRouter)
 // Use authentication middleware
 app.use(authenticateToken); // Make sure this is placed correctly
 

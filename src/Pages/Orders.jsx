@@ -1,11 +1,42 @@
-import React from 'react'
-import { Col, Container, Nav, Row } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import { Col, Container, Nav, Row, Card, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 export default function Orders() {
+    const [orders, setOrders] = useState([]); 
+    const [loading, setLoading] = useState(true); 
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchOrders = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/api/orders');
+                setOrders(response.data); 
+            } catch (err) {
+                setError(err.message); 
+            } finally {
+                setLoading(false); 
+            }
+        };
+
+        fetchOrders();
+    }, []);
+
+    // Function to handle order deletion
+    const handleDelete = async (orderId) => {
+        try {
+            await axios.delete(`http://localhost:8080/api/orders/${orderId}`);
+            // Refresh orders after deletion
+            setOrders(orders.filter(order => order.id !== orderId));
+        } catch (err) {
+            setError(err.message); 
+        }
+    };
+
     return (
         <Container className="my-5">
-            <Row>
+            <Row className="g-3">
                 <Col md={3}>
                     <div className="sidebar">
                         <div className="user-info mb-4">
@@ -15,9 +46,9 @@ export default function Orders() {
                                 </div>
                             </div>
                         </div>
-                        <Link className="mb-4" as={Link} to="/Account">لوحة التحكم</Link>
+                        <Link className="mb-4" to="/Account">لوحة التحكم</Link>
                         <Nav className="flex-column">
-                            <Nav.Link as={Link} to="/Account/Orders" style={{color:"blue"}}>الطلبات</Nav.Link>
+                            <Nav.Link as={Link} to="/Account/Orders" style={{ color: "blue" }}>الطلبات</Nav.Link>
                             <Nav.Link as={Link} to="/Account/Address">العنوان</Nav.Link>
                             <Nav.Link as={Link} to="/Account/AccountDetails">تفاصيل الحساب</Nav.Link>
                             <Nav.Link href="#">تسجيل الخروج</Nav.Link>
@@ -26,12 +57,45 @@ export default function Orders() {
                 </Col>
                 <Col md={9}>
                     <div className="content">
-                        <p className="user-welcome">
-                            لم يتم تسجيل اي طلبات بعد!
-                        </p>
+                        {loading && <p>جاري تحميل الطلبات...</p>}
+                        {error && <p className="text-danger">خطأ: {error}</p>}
+                        {!loading && !error && orders.length === 0 && (
+                            <p className="user-welcome">لم يتم تسجيل أي طلبات بعد!</p>
+                        )}
+                        <Row>
+                            {!loading && orders.map((order, index) => (
+                                <Col md={4} key={order.id} className="mb-4">
+                                    <Card>
+                                        <Card.Body>
+                                            <Card.Title>طلب رقم: {index + 1}</Card.Title> {/* Counter starts from 1 */}
+                                            <Card.Text>
+                                                <strong>منتجات:</strong>
+                                                <ul>
+                                                    {order.products.map(product => (
+                                                        <li key={product.product.id}>
+                                                            {product.product.name} × {product.quantity}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                                <strong>الإجمالي:</strong> {order.totalAmount} جنيه
+                                            </Card.Text>
+                                            <Button 
+                                                variant="danger" 
+                                                onClick={() => handleDelete(order.id)}
+                                            >
+                                                حذف الطلب
+                                            </Button>
+                                            <p className="mt-2 text-muted">
+                                                يمكنك التراجع في الطلب فقط في حال لم يتم تأكيده بواسطة البائع
+                                            </p>
+                                        </Card.Body>
+                                    </Card>
+                                </Col>
+                            ))}
+                        </Row>
                     </div>
                 </Col>
             </Row>
         </Container>
-    )
+    );
 }

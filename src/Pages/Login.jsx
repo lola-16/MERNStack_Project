@@ -1,10 +1,10 @@
-// Login.js
 import React, { useState, useEffect } from 'react';
 import './Css/Login.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser } from '../Rtk/Slices/Auth';
+import { loginUser, fetchUser } from '../Rtk/Slices/Auth'; // Import fetchUser
 import { Spinner } from 'react-bootstrap';
+import Swal from 'sweetalert2';
 
 const Login = () => {
     const dispatch = useDispatch();
@@ -23,18 +23,36 @@ const Login = () => {
     const error = useSelector((state) => state.auth.error);
     
     const [formErrors, setError] = useState({});
-    const [hasNavigated, setHasNavigated] = useState(false); // New state to prevent multiple navigations
+    const [hasNavigated, setHasNavigated] = useState(false); 
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
     
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (hasErrors()) {
             console.log(error);
-        } else {
-            dispatch(loginUser({ email, password }));
+            return; 
+        }
+
+        try {
+            const loginResult = await dispatch(loginUser({ email, password })).unwrap();
+            await dispatch(fetchUser()); // Fetch user data after login
+            Swal.fire({
+                title: 'نجاح!',
+                text: 'تم تسجيل الدخول بنجاح.',
+                icon: 'success',
+                confirmButtonText: 'موافق'
+            });
+        } catch (err) {
+            console.error('Login failed:', err);
+            Swal.fire({
+                title: 'خطأ!',
+                text: err.message || 'البريد الإلكتروني أو كلمة المرور غير صحيحة.',
+                icon: 'error',
+                confirmButtonText: 'موافق'
+            });
         }
     };
     
@@ -52,20 +70,13 @@ const Login = () => {
     };
 
     useEffect(() => {
-        console.log('useEffect triggered');
-        console.log('Token:', token);
-        console.log('User:', user);
-        console.log('Has Navigated:', hasNavigated);
-        
         if (token && user && !hasNavigated) {
             if (user.role === 'admin') {
-                console.log('Navigating to AdminDashboard');
                 navigate('/admin-dashboard', { replace: true });
             } else {
-                console.log('Navigating to Account');
                 navigate('/account', { replace: true });
             }
-            setHasNavigated(true); // Prevent further navigations
+            setHasNavigated(true);
         }
     }, [token, user, navigate, hasNavigated]);
 
