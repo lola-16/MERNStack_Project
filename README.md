@@ -97,14 +97,15 @@ You should see the Donicci website where you can explore and shop for socks.
     ├── routes
     ├── controllers
     ├── middlewares
-    ├── config
-    └── server.js
+    ├── .env
+    ├── index.js
+    └── uploads
 
 /frontend
     ├── src
         ├── components
         ├── pages
-        ├── services
+        ├── Rtk
         └── App.js
 ```
 
