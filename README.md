@@ -122,9 +122,3 @@ We welcome contributions to Donicci! If you'd like to contribute, follow these s
 This project does not currently have a license. If you're interested in using or contributing to this project, please contact the project owner.
 
 
-## Contact
-
-For any inquiries or feedback, feel free to reach out:
-- **Email:** alaaelkholya.z@gmail.com
-- **GitHub:** [your-username](https://github.com/lola-16)
-- **LinkedIn:** [your-profile](https://www.linkedin.com/in/alaa-elkholy-89471119b/)
