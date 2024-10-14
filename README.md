@@ -76,8 +76,7 @@ Donicci is an e-commerce platform that focuses on selling a variety of stylish a
   - `dotenv`
   - Custom routes: `userRoutes`, `productRoutes`, `categoryRoutes`, `orderRoutes`, `reviewRoutes`, `cartRoutes`, `offerRoutes`, `saleRouter`
   - Middleware: `authenticateToken`, `notFoundHandler`, `errorHandler`
-  - ## Technologies Used
-
+  
 
 ## Installation
 
