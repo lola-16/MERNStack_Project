@@ -7,15 +7,15 @@ Welcome to **Donicci**, a stylish online store for all your sock needs! This pro
 
 ## Table of Contents
 1. [Project Description](#project-description)
-2. [Technologies Used](#technologies-used)
-3. [Installation](#installation)
-4. [Backend Setup](#backend-setup)
-5. [Frontend Setup](#frontend-setup)
-6. [Usage](#usage)
-7. [Project Structure](#project-structure)
-8. [Contributing](#contributing)
-9. [License](#license)
-10. [Contact](#contact)
+2.[Features](#features)
+3. [Technologies Used](#technologies-used)
+4. [Installation](#installation)
+5. [Backend Setup](#backend-setup)
+6. [Frontend Setup](#frontend-setup)
+7. [Usage](#usage)
+8. [Project Structure](#project-structure)
+9. [Contributing](#contributing)
+10. [License](#license)
 
 ## Project Description
 
