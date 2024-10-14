@@ -68,6 +68,7 @@ Donicci is an e-commerce platform that focuses on selling a variety of stylish a
 - **Frontend:** React, HTML, Bootstrap 5
 - **Backend:** Node.js, Express.js
 - **Database:** MongoDB Atlas
+- **Authentication:** JWT (JSON Web Tokens)
 - **Libraries and Middleware:**
   - `express`
   - `mongoose`
@@ -75,6 +76,8 @@ Donicci is an e-commerce platform that focuses on selling a variety of stylish a
   - `dotenv`
   - Custom routes: `userRoutes`, `productRoutes`, `categoryRoutes`, `orderRoutes`, `reviewRoutes`, `cartRoutes`, `offerRoutes`, `saleRouter`
   - Middleware: `authenticateToken`, `notFoundHandler`, `errorHandler`
+  - ## Technologies Used
+
 
 ## Installation
 
@@ -86,25 +89,23 @@ Make sure you have the following installed:
 
 ### Backend Setup
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-username/donicci.git
-   cd donicci/backend
+1. **Create a `.env` file** in the backend directory:
+   If you don't already have one, create a file named `.env` in your backend directory. This file will store all the necessary environment variables for your application.
+
+2. **Add your environment variables** to the `.env` file:
+   Here's the setup for your Donicci project:
+
+   ```env
+   MONGODB_URI=mongodb+srv://Donicci:MERN@cluster0.zctmmxm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+   JWT_SECRET=HanenShaban12233
+   PORT=5000
    ```
 
-2. Install the backend dependencies:
-   ```bash
-   npm install
-   ```
+   - `MONGODB_URI`: This is the MongoDB connection string used for your database.
+   - `JWT_SECRET`: Your JWT secret key for token generation and authentication.
+   - `PORT`: The port number on which your backend server should run (e.g., 5000).
 
-3. Set up environment variables:
-   - Create a `.env` file in the backend directory.
-   - Add your environment variables (e.g., MongoDB connection string).
-
-4. Start the backend server:
-   ```bash
-   npm run start
-   ```
+**Important:** Keep the `.env` file private and avoid sharing it publicly or committing it to version control to ensure your sensitive data remains secure. 
 
 ### Frontend Setup
 
@@ -125,11 +126,11 @@ Make sure you have the following installed:
 
 ## Usage
 
-Once both the backend and frontend are running, open your web browser and navigate to:
-```
-http://localhost:3000
-```
-You should see the Donicci website where you can explore and shop for socks.
+Once the application is set up, you can navigate to the following endpoints:
+
+- **Home Page:** [http://localhost:3000](http://localhost:3000)
+- **Login:** Go to `/login` to authenticate.
+- **Products:** Browse available socks at `/products`.
 
 ## Project Structure
 
