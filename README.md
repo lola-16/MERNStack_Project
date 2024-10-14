@@ -1,70 +1,129 @@
-# Getting Started with Create React App
+# Donicci - Sock Selling Website
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Welcome to **Donicci**, a stylish online store for all your sock needs! This project is built using React for the frontend and Node.js for the backend, with HTML and Bootstrap 5 for the design.
 
-## Available Scripts
+![image](https://github.com/user-attachments/assets/3133a0d4-7de9-4679-96d9-e271a1c39f05)
 
-In the project directory, you can run:
 
-### `npm start`
+## Table of Contents
+1. [Project Description](#project-description)
+2. [Technologies Used](#technologies-used)
+3. [Installation](#installation)
+4. [Backend Setup](#backend-setup)
+5. [Frontend Setup](#frontend-setup)
+6. [Usage](#usage)
+7. [Project Structure](#project-structure)
+8. [Contributing](#contributing)
+9. [License](#license)
+10. [Contact](#contact)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Project Description
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Donicci is an e-commerce platform that focuses on selling a variety of stylish and comfortable socks. Users can browse products, add them to their cart, and make purchases seamlessly.
 
-### `npm test`
+## Technologies Used
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Frontend:** React, HTML, Bootstrap 5
+- **Backend:** Node.js, Express.js
+- **Database:** MongoDB Atlas
+- **Libraries and Middleware:**
+  - `express`
+  - `mongoose`
+  - `cors`
+  - `dotenv`
+  - Custom routes: `userRoutes`, `productRoutes`, `categoryRoutes`, `orderRoutes`, `reviewRoutes`, `cartRoutes`, `offerRoutes`, `saleRouter`
+  - Middleware: `authenticateToken`, `notFoundHandler`, `errorHandler`
 
-### `npm run build`
+## Installation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Prerequisites
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Make sure you have the following installed:
+- Node.js and npm
+- Git
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Backend Setup
 
-### `npm run eject`
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/donicci.git
+   cd donicci/backend
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+2. Install the backend dependencies:
+   ```bash
+   npm install
+   ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+3. Set up environment variables:
+   - Create a `.env` file in the backend directory.
+   - Add your environment variables (e.g., MongoDB connection string).
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+4. Start the backend server:
+   ```bash
+   npm run start
+   ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Frontend Setup
 
-## Learn More
+1. Navigate to the frontend directory:
+   ```bash
+   cd ../frontend
+   ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+2. Install the frontend dependencies:
+   ```bash
+   npm install
+   ```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+3. Start the React development server:
+   ```bash
+   npm start
+   ```
 
-### Code Splitting
+## Usage
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Once both the backend and frontend are running, open your web browser and navigate to:
+```
+http://localhost:3000
+```
+You should see the Donicci website where you can explore and shop for socks.
 
-### Analyzing the Bundle Size
+## Project Structure
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```
+/backend
+    ├── models
+    ├── routes
+    ├── controllers
+    ├── middlewares
+    ├── config
+    └── server.js
 
-### Making a Progressive Web App
+/frontend
+    ├── src
+        ├── components
+        ├── pages
+        ├── services
+        └── App.js
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Contributing
 
-### Advanced Configuration
+We welcome contributions to Donicci! If you'd like to contribute, follow these steps:
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature-branch-name`).
+3. Commit your changes (`git commit -am 'Add some feature'`).
+4. Push to the branch (`git push origin feature-branch-name`).
+5. Create a new Pull Request.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## License
+This project does not currently have a license. If you're interested in using or contributing to this project, please contact the project owner.
 
-### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Contact
 
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+For any inquiries or feedback, feel free to reach out:
+- **Email:** alaaelkholya.z@gmail.com
+- **GitHub:** [your-username](https://github.com/lola-16)
+- **LinkedIn:** [your-profile](https://www.linkedin.com/in/alaa-elkholy-89471119b/)
