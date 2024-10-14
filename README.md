@@ -59,7 +59,7 @@ Donicci is an e-commerce platform that focuses on selling a variety of stylish a
    - Integration with payment gateways for secure online transactions.
    - Multiple payment methods supported (credit/debit cards, PayPal, etc.).
 
-10. **Admin Dashboard (if applicable)**
+10. **Admin Dashboard **
    - Admin functionality to manage products, orders, users, and reviews.
    - Ability to update stock information, add new products, and process orders.
 
