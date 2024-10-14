@@ -21,6 +21,48 @@ Welcome to **Donicci**, a stylish online store for all your sock needs! This pro
 
 Donicci is an e-commerce platform that focuses on selling a variety of stylish and comfortable socks. Users can browse products, add them to their cart, and make purchases seamlessly.
 
+## Features
+
+1. **User Authentication**
+   - Secure login and registration for customers using JWT (JSON Web Tokens).
+   - Password encryption for user data protection.
+
+2. **Product Catalog**
+   - Browse a wide range of socks categorized by style, color, size, and price.
+   - Detailed product descriptions, images, and user reviews to help customers make informed decisions.
+
+3. **Shopping Cart**
+   - Add or remove items to the shopping cart with ease.
+   - View cart details, including item quantities, prices, and a summary of the total cost.
+
+4. **Order Management**
+   - Seamless checkout process with order summary and payment options.
+   - Track order status from processing to shipment and delivery.
+
+5. **Search and Filters**
+   - Advanced search functionality to quickly find products based on keywords.
+   - Filter products by categories, price range, ratings, and availability.
+
+6. **Discounts and Offers**
+   - Special discounts and promotional offers available for various products.
+   - Display of ongoing sales events and exclusive deals to encourage purchases.
+
+7. **Customer Reviews and Ratings**
+   - Users can leave reviews and ratings for products they have purchased.
+   - Average ratings displayed on the product page to help guide customer decisions.
+
+8. **Responsive Design**
+   - Mobile-friendly design using Bootstrap 5 for optimal viewing on all devices.
+   - Easy navigation with a clean and modern UI.
+
+9. **Secure Payment Integration**
+   - Integration with payment gateways for secure online transactions.
+   - Multiple payment methods supported (credit/debit cards, PayPal, etc.).
+
+10. **Admin Dashboard (if applicable)**
+   - Admin functionality to manage products, orders, users, and reviews.
+   - Ability to update stock information, add new products, and process orders.
+
 ## Technologies Used
 
 - **Frontend:** React, HTML, Bootstrap 5
