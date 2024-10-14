@@ -97,12 +97,12 @@ Make sure you have the following installed:
    ```env
    MONGODB_URI=mongodb+srv://Donicci:MERN@cluster0.zctmmxm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
    JWT_SECRET=HanenShaban12233
-   PORT=5000
+   PORT=3000
    ```
 
    - `MONGODB_URI`: This is the MongoDB connection string used for your database.
    - `JWT_SECRET`: Your JWT secret key for token generation and authentication.
-   - `PORT`: The port number on which your backend server should run (e.g., 5000).
+   - `PORT`: The port number on which your backend server should run (e.g., 3000).
 
 **Important:** Keep the `.env` file private and avoid sharing it publicly or committing it to version control to ensure your sensitive data remains secure. 
 
