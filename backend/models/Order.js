@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const orderSchema = new mongoose.Schema({
-    orderId: { type: Number, unique: true },
+    // MongoDB automatically adds an _id field, so you don't need to define it here
+    orderId: { type: Number, unique: true },  // This is your custom increment field
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     name: { type: String, required: true },
     email: { type: String, required: true },
@@ -19,6 +20,7 @@ const orderSchema = new mongoose.Schema({
     orderDate: { type: Date, default: Date.now },
     isSubmitted: { type: Boolean, default: false } 
 });
+
 
 orderSchema.plugin(AutoIncrement, { inc_field: 'orderId', start_seq: 1 });
 

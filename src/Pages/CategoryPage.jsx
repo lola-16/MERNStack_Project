@@ -7,9 +7,11 @@ import './Css/ManSocks.css';
 const CategoryPage = () => {
     const { categoryNumber } = useParams();
     const [products, setProducts] = useState([]);
+    const [sortedProducts, setSortedProducts] = useState([]); // New state for sorted products
     const [categoryName, setCategoryName] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [sortOption, setSortOption] = useState('default'); // State for sort option
 
     useEffect(() => {
         const fetchCategoryAndProducts = async () => {
@@ -41,6 +43,23 @@ const CategoryPage = () => {
         fetchCategoryAndProducts();
     }, [categoryNumber]);
 
+    useEffect(() => {
+        setSortedProducts(products); // Set sorted products initially
+    }, [products]);
+
+    const handleSortChange = (e) => {
+        const selectedOption = e.target.value;
+        setSortOption(selectedOption);
+
+        let sortedArray = [...products]; // Create a copy of products for sorting
+        if (selectedOption === 'priceLowToHigh') {
+            sortedArray.sort((a, b) => a.price - b.price); // Sort ascending
+        } else if (selectedOption === 'priceHighToLow') {
+            sortedArray.sort((a, b) => b.price - a.price); // Sort descending
+        }
+        setSortedProducts(sortedArray); // Update sorted products
+    };
+
     return (
         <div className="container">
             <h2 className="my-4">{categoryName}</h2>
@@ -50,6 +69,8 @@ const CategoryPage = () => {
                     <select
                         id="sort"
                         className="form-select"
+                        value={sortOption}
+                        onChange={handleSortChange} // Attach change handler
                     >
                         <option value="default">الترتيب الافتراضي</option>
                         <option value="priceLowToHigh">ترتيب حسب: الأقل سعراً</option>
@@ -61,12 +82,12 @@ const CategoryPage = () => {
                 <p>جارٍ التحميل...</p>
             ) : error ? (
                 <p className="text-danger">{error}</p>
-            ) : products.length > 0 ? (
+            ) : sortedProducts.length > 0 ? (
                 <div className="row" id="product-list">
-                    {products.map((sock) => (
+                    {sortedProducts.map((sock) => (
                         <SocksCard
-                            key={sock._id}           
-                            id={sock._id}           
+                            key={sock._id}
+                            id={sock._id}
                             image={sock.image}
                             name={sock.name}
                             deletedPrice={sock.deletedPrice}

@@ -33,7 +33,7 @@ export default function FavPage() {
                                     </div>
                                     <div className="col-md-6 col-lg-3">
                                         <h4>السعر</h4>
-                                        <div className="d-flex"><del>{item.oldprice} جنيه</del><span>{item.currentPrice}  جنيه</span></div>
+                                        <div className="d-flex"><span>{item.currentPrice}  جنيه</span></div>
                                     </div>
                                     <div className="col-md-6 col-lg-3">
                                         <h4>تاريخ الاضافة</h4>

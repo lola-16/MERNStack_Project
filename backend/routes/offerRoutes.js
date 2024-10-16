@@ -38,7 +38,6 @@ const upload = multer({
 // Routes
 router.post('/offers', upload.single('image'), offerController.createOffer);
 router.get('/offers', offerController.getAllOffers);
-
 router.put('/offers/:id', upload.single('image'), offerController.updateOffer);
 router.delete('/offers/:id', offerController.deleteOffer);
 

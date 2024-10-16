@@ -5,7 +5,6 @@ import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FaShoppingCart, FaHeart, FaUser } from 'react-icons/fa';
 import { increaseQuantity, decreaseQuantity, removeProduct } from '../Rtk/Slices/CartSlice';
-import Swal from 'sweetalert2'; 
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -21,10 +20,6 @@ const Header = () => {
   const totalWithShipping = useMemo(() => {
     return total < 350 ? total + shipping : total;
   }, [total, shipping]); 
-
-  const activateOffer = () => {
-    setIsOfferActivated(true);
-  };
 
   return (
     <>
@@ -147,7 +142,17 @@ const Header = () => {
               </div>
 
               <div className="w-100">
-                <Link to="/OrderedForm" className="btn w-100 btn_order">اتمام الطلب</Link>
+                <Link 
+                  to="/OrderedForm" 
+                  className="btn w-100 btn_order" 
+                  disabled={cartItems.length === 0} // Disable the button if the cart is empty
+                  style={{ 
+                    pointerEvents: cartItems.length === 0 ? 'none' : 'auto', // Prevent click events when disabled
+                    opacity: cartItems.length === 0 ? 0.5 : 1 // Reduce opacity for visual indication
+                  }}
+                >
+                  اتمام الطلب
+                </Link>
               </div>
               <div className="text-center my-3">
                 <Link to="/category/all">مزيد من التسوق</Link>

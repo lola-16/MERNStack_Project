@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { clearCart } from '../Rtk/Slices/CartSlice';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
 import './Css/OrderedForm.css';
 
 export default function OrderedForm() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate(); // Initialize useNavigate hook
   const [formData, setFormData] = useState({
     name: '',
     address: '',
@@ -47,7 +52,7 @@ export default function OrderedForm() {
 
     try {
       const response = await axios.post('http://localhost:8080/api/orders', {
-        user: user ? user.id : null,  // Use user ID from Redux state
+        user: user ? user.id : null, // Use user ID from Redux state
         name: formData.name,
         address: formData.address,
         phone: formData.phone,
@@ -56,39 +61,37 @@ export default function OrderedForm() {
         paymentMethod: formData.paymentMethod,
         products: cartItems.map(item => ({
           product: item.id,
+          name: item.name, // Add product name
           quantity: item.quantity
         })),
         totalAmount: totalWithShipping,
         shipping: 40,
       });
 
-      console.log("Order created successfully:", response.data);
+      console.log('Order created successfully:', response.data);
 
-      // Show SweetAlert on success
+      // Clear the cart after order confirmation
+      dispatch(clearCart());
+
+      // Show SweetAlert on success AFTER clearing the cart
       Swal.fire({
         icon: 'success',
-        title: 'Order Created!',
+        title: 'Order Confirmed!',
         text: 'Your order has been successfully placed.',
-        confirmButtonText: 'OK'
-      });
-
-      // Optionally, reset form data after success
-      setFormData({
-        name: '',
-        address: '',
-        phone: '',
-        email: '', // Resetting email
-        notes: '',
-        paymentMethod: 'cashOnDelivery',
+        confirmButtonText: 'OK',
+      }).then(() => {
+        // Navigate to the order page after SweetAlert confirmation
+        navigate('/account/orders');  // Replace '/order' with the actual order page route
       });
 
     } catch (error) {
-      console.error("Error creating order:", error);
-      setError(error.response?.data?.error || "An error occurred"); // Capture specific error message
+      console.error('Error creating order:', error);
+      setError(error.response?.data?.error || 'An error occurred'); // Capture specific error message
     } finally {
-      setLoading(false); // Set loading to false after the submission
+      setLoading(false); // Set loading to false after submission
     }
   };
+
 
   return (
     <Container className="my-5">

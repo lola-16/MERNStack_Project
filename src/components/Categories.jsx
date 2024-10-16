@@ -6,6 +6,7 @@ import './css/category.css';
 const Categories = () => {
     const [categories, setCategories] = useState([]);
     const [newCategory, setNewCategory] = useState('');
+    const [newCategoryId, setNewCategoryId] = useState(''); // New input for category ID
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -25,6 +26,9 @@ const Categories = () => {
                 }));
 
                 setCategories(categoriesWithId);
+                // Calculate the next categoryId automatically
+                const maxCategoryId = Math.max(0, ...categoriesWithId.map(cat => cat.categoryId));
+                setNewCategoryId(maxCategoryId + 1);
             } catch (err) {
                 setError('Failed to fetch categories');
                 console.error(err);
@@ -38,15 +42,23 @@ const Categories = () => {
 
     const handleAddCategory = async (e) => {
         e.preventDefault();
-        if (newCategory.trim() === '') return;
+        if (newCategory.trim() === '') {
+            return Swal.fire({
+                icon: 'error',
+                title: 'خطأ في الإدخال',
+                text: 'الرجاء إدخال اسم تصنيف.'
+            });
+        }
 
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.post('http://localhost:8080/api/categories', { name: newCategory }, {
+            const response = await axios.post('http://localhost:8080/api/categories', { name: newCategory, categoryId: newCategoryId }, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setCategories([...categories, response.data]);
             setNewCategory('');
+            // Update the categoryId for the next category
+            setNewCategoryId(newCategoryId + 1);
 
             Swal.fire({
                 icon: 'success',
@@ -150,6 +162,16 @@ const Categories = () => {
                         id="categoryName"
                         value={newCategory}
                         onChange={(e) => setNewCategory(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="categoryId">رقم الفئة:</label>
+                    <input
+                        type="number"
+                        id="categoryId"
+                        value={newCategoryId}
+                        disabled // Disable input as it's auto-generated
                         required
                     />
                 </div>

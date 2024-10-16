@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2'; // Import SweetAlert
 import './css/OrderAdmin.css';
 
 const OrderAdmin = () => {
@@ -17,6 +18,7 @@ const OrderAdmin = () => {
                     }
                 });
                 const ordersData = response.data;
+                console.log("Fetched orders data:", ordersData); // Check for _id field in each order
                 setOrders(ordersData);
             } catch (err) {
                 setError(err.response ? err.response.data.error : 'Failed to fetch orders');
@@ -25,66 +27,43 @@ const OrderAdmin = () => {
                 setLoading(false);
             }
         };
-
         fetchOrders();
     }, []);
-
-    const createSale = async (saleData) => {
-        try {
-            const token = localStorage.getItem('token');
-            const response = await axios.post('http://localhost:8080/api/sales', saleData, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                },
-            });
-            console.log('Sale created:', response.data); // Ensure that the sale data is correctly logged
-        } catch (err) {
-            console.error('Error creating sale:', err.response ? err.response.data : err.message);
-        }
-    };
     
-
     const confirmOrder = async (orderId) => {
+        console.log("Order ID to confirm:", orderId);  // This should print the correct _id
+
+        if (!orderId) {
+            console.error('Order ID is undefined');
+            return;
+        }
+
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.put(`http://localhost:8080/api/orders/submit/${orderId}`, {}, {
+            await axios.put(`http://localhost:8080/api/orders/${orderId}`, { isSubmitted: true }, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 }
             });
-    
-            console.log('Confirm Order Response:', response.data); // Check the response data
-    
-            // Validate response
-            if (!response.data || !response.data.products) {
-                throw new Error("Invalid order data received");
-            }
-    
-            const order = response.data; 
-            const saleData = {
-                orderId: order.orderId,
-                name: order.name,
-                email: order.email,
-                totalAmount: order.totalAmount,
-                products: order.products.map(product => ({
-                    product: product.product,
-                    productName: product.productName,
-                    quantity: product.quantity,
-                    price: product.price,
-                })),
-            };
-    
-            await createSale(saleData);
-            
-            // Remove the order from the local state
-            setOrders(prevOrders => prevOrders.filter(order => order.orderId !== orderId));
+
+            Swal.fire({
+                title: 'تم تأكيد الطلب!',
+                text: 'تم إرسال الطلب إلى قسم المبيعات.',
+                icon: 'success',
+                confirmButtonText: 'حسناً'
+            });
+
+            // Remove the submitted order from the state
+            setOrders(orders.filter(order => order._id !== orderId));
         } catch (err) {
-            console.error('Error confirming order:', err);
-            setError(err.response ? err.response.data.error : 'Failed to confirm order');
+            Swal.fire({
+                title: 'خطأ',
+                text: 'حدث خطأ أثناء تأكيد الطلب.',
+                icon: 'error',
+                confirmButtonText: 'حسناً'
+            });
         }
     };
-    
-    
 
     if (loading) {
         return <div>Loading orders...</div>;
@@ -99,12 +78,12 @@ const OrderAdmin = () => {
             <h1>الطلبات</h1>
             <div className="order-rows">
                 {orders.length === 0 ? (
-                    <p>لا توجد طلبات لعرضها.</p> 
+                    <p>لا توجد طلبات لعرضها.</p>
                 ) : (
                     orders.map(order => (
-                        <div key={order.orderId} className="order-card">
+                        <div key={order._id} className="order-card">
                             <div className="order-header">
-                                <h2>رقم الطلب: {order.orderId}</h2>
+                                <h2>رقم الطلب: {order._id}</h2>
                                 <p className="order-status">
                                     الحالة: {order.isSubmitted ? 'تم تأكيده' : 'غير مؤكد'}
                                 </p>
@@ -132,7 +111,10 @@ const OrderAdmin = () => {
                             </div>
                             <div className="order-actions">
                                 {!order.isSubmitted && (
-                                    <button className="confirm-button" onClick={() => confirmOrder(order.orderId)}>
+                                    <button
+                                        className="confirm-button"
+                                        onClick={() => confirmOrder(order._id)} // Use _id for confirmation
+                                    >
                                         تأكيد الطلب
                                     </button>
                                 )}

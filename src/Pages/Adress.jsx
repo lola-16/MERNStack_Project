@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Col, Container, Nav, Row, Form, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchUser } from '../Rtk/Slices/Auth'; 
+import { fetchUser, logout } from '../Rtk/Slices/Auth'; 
 import axios from 'axios';
 import Swal from 'sweetalert2'; 
 
@@ -65,8 +65,19 @@ export default function Address() {
         }
     };
 
+    const handleLogout = () => {
+        dispatch(logout()); // Dispatch the logout action
+        Swal.fire({
+            icon: 'success',
+            title: 'تم تسجيل الخروج',
+            text: 'تم تسجيل الخروج بنجاح!',
+        }).then(() => {
+            Navigate('/login'); // Redirect to login page or homepage
+        });
+    };
+
     if (!user) {
-        return <div>Loading...</div>; // Loading state if user data is not available
+        return <div>Loading...</div>;
     }
 
     return (
@@ -86,7 +97,7 @@ export default function Address() {
                             <Nav.Link as={Link} to="/Account/Orders">الطلبات</Nav.Link>
                             <Nav.Link as={Link} to="/Account/Address" style={{ color: "blue" }}>العنوان</Nav.Link>
                             <Nav.Link as={Link} to="/Account/AccountDetails">تفاصيل الحساب</Nav.Link>
-                            <Nav.Link href="#">تسجيل الخروج</Nav.Link>
+                            <Nav.Link  onClick={handleLogout}>تسجيل الخروج</Nav.Link>
                         </Nav>
                     </div>
                 </Col>

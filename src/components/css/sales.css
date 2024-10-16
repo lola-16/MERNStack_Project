@@ -1,0 +1,39 @@
+.sales-container {
+    padding: 20px;
+}
+
+.summary {
+    margin-bottom: 20px;
+}
+
+.sales-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.sale-card {
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sale-card .card-header {
+    margin-bottom: 10px;
+}
+
+.sale-card h3 {
+    margin: 0;
+}
+
+.sale-card p {
+    margin: 5px 0;
+}
+
+@media (max-width: 600px) {
+    .sales-cards {
+        grid-template-columns: 1fr; /* Stacks cards vertically on small screens */
+    }
+}

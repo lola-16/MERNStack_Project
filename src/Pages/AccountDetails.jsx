@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Col, Container, Nav, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate instead of Navigate
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchUser } from '../Rtk/Slices/Auth'; // Assuming you have this slice for fetching user details
+import { fetchUser, logout } from '../Rtk/Slices/Auth'; // Assuming you have this slice for fetching user details
 import axios from 'axios';
 import Swal from 'sweetalert2'; // Import SweetAlert
 
@@ -13,6 +13,7 @@ export default function AccountDetails() {
     const [newPassword, setNewPassword] = useState('');
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
+    const navigate = useNavigate(); // Use the useNavigate hook
 
     // Fetch user details from Redux 
     useEffect(() => {
@@ -75,8 +76,19 @@ export default function AccountDetails() {
         }
     };
 
+    const handleLogout = () => {
+        dispatch(logout()); // Dispatch the logout action
+        Swal.fire({
+            icon: 'success',
+            title: 'تم تسجيل الخروج',
+            text: 'تم تسجيل الخروج بنجاح!',
+        }).then(() => {
+            navigate('/login'); // Use navigate to redirect after the alert is closed
+        });
+    };
+
     if (!user) {
-        return <div>Loading...</div>; // Show loading state while user data is being fetched
+        return <div>Loading...</div>;
     }
 
     return (
@@ -96,7 +108,7 @@ export default function AccountDetails() {
                             <Nav.Link as={Link} to="/Account/Orders">الطلبات</Nav.Link>
                             <Nav.Link as={Link} to="/Account/Address">العنوان</Nav.Link>
                             <Nav.Link as={Link} to="/Account/AccountDetails" style={{ color: "blue" }}>تفاصيل الحساب</Nav.Link>
-                            <Nav.Link href="#">تسجيل الخروج</Nav.Link>
+                            <Nav.Link onClick={handleLogout}>تسجيل الخروج</Nav.Link>
                         </Nav>
                     </div>
                 </Col>
@@ -112,6 +124,7 @@ export default function AccountDetails() {
                                     id="name"
                                     value={fullName}
                                     onChange={(e) => setFullName(e.target.value)} // Update name input
+                                    disabled // Disable the full name input field
                                     required
                                 />
                             </div>
@@ -123,6 +136,7 @@ export default function AccountDetails() {
                                     id="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)} // Update email input
+                                    disabled // Disable the email input field
                                     required
                                 />
                             </div>

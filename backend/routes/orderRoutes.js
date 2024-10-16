@@ -18,7 +18,7 @@ router.delete('/orders/:id', authMiddleware, orderController.deleteOrder);
 // Get All Orders
 router.get('/ordersall', authMiddleware, authorizeRoles('admin'), orderController.getAllOrders);
 
-router.put('/orders/submit/:id', authMiddleware, authorizeRoles('admin'), orderController.confirmOrder);
 
+router.get('/orderSubmited', authMiddleware, authorizeRoles('admin'), orderController.getSubmittedOrders);
 
 module.exports = router;

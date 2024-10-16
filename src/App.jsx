@@ -14,7 +14,7 @@ import Offers from './Pages/Offers';
 import Register from './Pages/Register';
 import FavPage from './Pages/FavPage';
 import Cart from './Pages/Cart';
-import Address from './Pages/Adress'; 
+import Address from './Pages/Adress';
 import AccountDetails from './Pages/AccountDetails';
 import Orders from './Pages/Orders';
 import CategoryPage from './Pages/CategoryPage';
@@ -53,17 +53,17 @@ function App() {
           <Route path="/men-shoe" element={<MenShoe />} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/offers" element={<Offers />} />
-          
           {/* Protected Routes for Admin */}
-          <Route element={<ProtectedRoute requiredRole="admin" />}>
-            <Route path="/admin-dashboard" element={<AdminDashboard />} />
-            <Route path="/admin-dashboard/category" element={<Categories />} />
-            <Route path="/admin-dashboard/product" element={<Products />} />
-            <Route path="/admin-dashboard/user" element={<Users />} />
-            <Route path="/admin-dashboard/sales" element={<Sales />} />
-            <Route path="/admin-dashboard/ordersAdmin" element={<OrderAdmin />} />
+          <Route path="/admin-dashboard" element={<ProtectedRoute requiredRole="admin" />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="category" element={<Categories />} />
+            <Route path="product" element={<Products />} />
+            <Route path="user" element={<Users />} />
+            <Route path="sales" element={<Sales />} />
+            <Route path="ordersAdmin" element={<OrderAdmin />} />
+
           </Route>
-          
+
           {/* Protected Routes for Authenticated Users */}
           <Route element={<ProtectedRoute />}>
             <Route path="/OrderedForm" element={<OrderedForm />} />

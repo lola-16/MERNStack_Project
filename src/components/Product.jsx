@@ -12,10 +12,11 @@ const Products = () => {
         image: null,
         stock: '',
         description: '',
-        category: '',
+        category: '', // Keep this as the category ID
     };
 
     const [products, setProducts] = useState([]);
+    const [categories, setCategories] = useState([]); // New state for categories
     const [productForm, setProductForm] = useState(initialFormState);
     const [isEditing, setIsEditing] = useState(false);
     const [currentProductId, setCurrentProductId] = useState(null);
@@ -26,21 +27,43 @@ const Products = () => {
 
     useEffect(() => {
         const fetchProducts = async () => {
+            setLoading(true); // Set loading state
+            setError(null); // Clear previous errors
+            try {
+                const response = await fetch('http://localhost:8080/api/products'); // Your API endpoint
+                console.log('Response status:', response.status); // Log status code for debugging
+        
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`); // Throw error for non-2xx responses
+                }
+        
+                const data = await response.json(); // Parse JSON response
+                console.log('Products fetched:', data); // Log fetched data
+                setProducts(data); // Update products state
+            } catch (error) {
+                console.error('Error fetching products:', error); // Log error
+                setError(error.message); // Set error state to display
+            } finally {
+                setLoading(false); // Reset loading state
+            }
+        };
+        
+        
+
+        const fetchCategories = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get('http://localhost:8080/api/products', {
+                const response = await axios.get('http://localhost:8080/api/categories', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
-                setProducts(response.data);
+                setCategories(response.data); // Store categories
             } catch (err) {
-                setError('Failed to fetch products');
-                console.error(err);
-            } finally {
-                setLoading(false);
+                console.error('Failed to fetch categories', err);
             }
         };
 
         fetchProducts();
+        fetchCategories(); // Call the fetchCategories function
     }, []);
 
     const handleInputChange = (e) => {
@@ -55,36 +78,36 @@ const Products = () => {
 
     const handleAddProduct = async (e) => {
         e.preventDefault();
-    
+
         // Basic validation to ensure the required fields are filled
-        if (!productForm.name || !productForm.price || !productForm.stock || !productForm.deletedPrice) {
+        if (!productForm.name || !productForm.price || !productForm.stock || !productForm.deletedPrice || !productForm.category) {
             Swal.fire('Error', 'All required fields must be filled.', 'error');
             return;
         }
-    
+
         const formData = new FormData();
-        
+
         // Append form data fields, including required ones
         formData.append('name', productForm.name);
         formData.append('price', parseFloat(productForm.price));  // Ensure price is a float
         formData.append('deletedPrice', parseFloat(productForm.deletedPrice)); // Add deletedPrice here
         formData.append('stock', parseInt(productForm.stock));    // Ensure stock is an integer
         formData.append('description', productForm.description);
-        formData.append('category', productForm.category);
+        formData.append('category', productForm.category); // Category ID to be sent here
         formData.append('newPrice', parseFloat(productForm.price)); // Add newPrice here
-    
+
         // Uncomment this line to include image again
         if (productForm.image) {
             formData.append('image', productForm.image);
         }
-    
+
         // Log formData content for debugging
         formData.forEach((value, key) => {
             console.log(key, value);
         });
-    
+
         setSubmitting(true);
-    
+
         try {
             const token = localStorage.getItem('token');
             const response = await axios.post('http://localhost:8080/api/products', formData, {
@@ -93,11 +116,11 @@ const Products = () => {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-    
+
             setProducts([...products, response.data]);
             setProductForm(initialFormState);
             document.getElementById('image').value = '';  // Reset the image input field
-    
+
             Swal.fire('Success', 'Product added successfully!', 'success');
         } catch (err) {
             if (err.response) {
@@ -122,13 +145,13 @@ const Products = () => {
             image: null,
             stock: product.stock,
             description: product.description,
-            category: product.category,
+            category: product.category, // Store the category ID
         });
     };
 
     const handleUpdateProduct = async (e) => {
         e.preventDefault();
-        if (!productForm.name || !productForm.price || !productForm.stock) {
+        if (!productForm.name || !productForm.price || !productForm.stock || !productForm.category) {
             Swal.fire('Error', 'All required fields must be filled.', 'error');
             return;
         }
@@ -190,15 +213,14 @@ const Products = () => {
         });
     };
 
-    const truncateDescription = (description) => {
-        const words = description.split(' ');
-        return words.length > 2 ? `${words.slice(0, 2).join(' ')}...` : description;
-    };
 
     // Filter products based on the search term
     const filteredProducts = products.filter(product => 
         product.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    // Log the filtered products for debugging
+    console.log('Filtered Products:', filteredProducts);
 
     if (loading) {
         return <div>Loading products...</div>;
@@ -233,7 +255,7 @@ const Products = () => {
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="price">السعر:</label>
+                    <label htmlFor="price">سعر المنتج:</label>
                     <input
                         type="number"
                         id="price"
@@ -255,7 +277,7 @@ const Products = () => {
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="stock">المخزون:</label>
+                    <label htmlFor="stock">الكمية المتاحة:</label>
                     <input
                         type="number"
                         id="stock"
@@ -266,7 +288,16 @@ const Products = () => {
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="description">الوصف:</label>
+                    <label htmlFor="image">صورة المنتج:</label>
+                    <input
+                        type="file"
+                        id="image"
+                        name="image"
+                        onChange={handleImageChange}
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="description">وصف المنتج:</label>
                     <textarea
                         id="description"
                         name="description"
@@ -275,50 +306,45 @@ const Products = () => {
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="category">رقم الفئة:</label>
-                    <input
-                        type="number"
+                    <label htmlFor="category">اختر الفئة:</label>
+                    <select
                         id="category"
                         name="category"
                         value={productForm.category}
                         onChange={handleInputChange}
-                    />
+                        required
+                    >
+                        <option value="">-- اختر الفئة --</option>
+                        {categories.map(category => (
+                            <option key={category._id} value={category._id}>
+                                {category.name}
+                            </option>
+                        ))}
+                    </select>
                 </div>
-                <div className="form-group">
-                    <label htmlFor="image">صورة المنتج:</label>
-                    <input
-                        type="file"
-                        id="image"
-                        name="image"
-                        accept="image/*"
-                        onChange={handleImageChange}
-                        required={!isEditing}
-                    />
-                </div>
-
-                <button type="submit" disabled={submitting}>
-                    {isEditing ? 'تعديل المنتج' : 'اضافة منتج'}
+                <button type="submit" className="submit-btn" disabled={submitting}>
+                    {isEditing ? 'تحديث المنتج' : 'اضف منتج'}
                 </button>
-                {isEditing && (
-                    <button type="button" onClick={() => { setIsEditing(false); setProductForm(initialFormState); }}>
-                        الغاء
-                    </button>
-                )}
             </form>
-
-            <h2>المنتجات</h2>
+            <h2 className='text-center mb-3'>المنتجات</h2>
             <div className="product-list">
-                {filteredProducts.map(product => (
-                    <div key={product._id} className="product-card">
-                        <img src={product.image} alt={product.name} />
-                        <h3>{product.name}</h3>
-                        <p>{truncateDescription(product.description)}</p>
-                        <div className="product-actions">
-                            <button className="edit-btn" onClick={() => handleEditProduct(product)}>تعديل</button>
-                            <button className="delete-btn" onClick={() => handleDeleteProduct(product._id)}>حذف</button>
+                {filteredProducts.length > 0 ? (
+                    filteredProducts.map(product => (
+                        <div key={product._id} className="product-card">
+                            <img src={product.image} alt={product.name} />
+                            <h3>{product.name}</h3>
+                            <p>{product.description}</p>
+                            <p>{product.price}ج.م</p>
+                            <p> رقم الفئة:{product.category}</p>
+                            <div className="product-actions">
+                                <button className="edit-btn" onClick={() => handleEditProduct(product)}>تعديل</button>
+                                <button className="delete-btn" onClick={() => handleDeleteProduct(product._id)}>حذف</button>
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))
+                ) : (
+                    <p>لا توجد منتجات للعرض</p> 
+                )}
             </div>
         </div>
     );

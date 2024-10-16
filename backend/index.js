@@ -8,7 +8,6 @@ const orderRoutes = require('./routes/orderRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const offerRoutes = require('./routes/offerRoutes');
-const saleRouter=require('./routes/saleRouter')
 const cors = require('cors');
 const authenticateToken = require('./middlewares/authMiddleware');
 const notFoundHandler = require('./middlewares/notFoundMiddleware');
@@ -41,7 +40,6 @@ app.use('/api', orderRoutes);
 app.use('/api', reviewRoutes);
 app.use('/api', cartRoutes);
 app.use('/api', offerRoutes);
-app.use('/api',saleRouter)
 // Use authentication middleware
 app.use(authenticateToken); // Make sure this is placed correctly
 
