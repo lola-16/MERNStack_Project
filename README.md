@@ -1,70 +1,166 @@
-# Getting Started with Create React App
+# Donicci - Sock Selling Website
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Welcome to **Donicci**, a stylish online store for all your sock needs! This project is built using React for the frontend and Node.js for the backend, with HTML and Bootstrap 5 for the design.
 
-## Available Scripts
+![image](https://github.com/user-attachments/assets/3133a0d4-7de9-4679-96d9-e271a1c39f05)
 
-In the project directory, you can run:
 
-### `npm start`
+## Table of Contents
+1. [Project Description](#project-description)
+2. [Features](#features)
+3. [Technologies Used](#technologies-used)
+4. [Installation](#installation)
+5. [Backend Setup](#backend-setup)
+6. [Frontend Setup](#frontend-setup)
+7. [Usage](#usage)
+8. [Project Structure](#project-structure)
+9. [Contributing](#contributing)
+10. [License](#license)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Project Description
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Donicci is an e-commerce platform that focuses on selling a variety of stylish and comfortable socks. Users can browse products, add them to their cart, and make purchases seamlessly.
 
-### `npm test`
+## Features
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. **User Authentication**
+   - Secure login and registration for customers using JWT (JSON Web Tokens).
+   - Password encryption for user data protection.
 
-### `npm run build`
+2. **Product Catalog**
+   - Browse a wide range of socks categorized by style, color, size, and price.
+   - Detailed product descriptions, images, and user reviews to help customers make informed decisions.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. **Shopping Cart**
+   - Add or remove items to the shopping cart with ease.
+   - View cart details, including item quantities, prices, and a summary of the total cost.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+4. **Order Management**
+   - Seamless checkout process with order summary and payment options.
+   - Track order status from processing to shipment and delivery.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+5. **Search and Filters**
+   - Advanced search functionality to quickly find products based on keywords.
+   - Filter products by categories, price range, ratings, and availability.
 
-### `npm run eject`
+6. **Discounts and Offers**
+   - Special discounts and promotional offers available for various products.
+   - Display of ongoing sales events and exclusive deals to encourage purchases.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+7. **Customer Reviews and Ratings**
+   - Users can leave reviews and ratings for products they have purchased.
+   - Average ratings displayed on the product page to help guide customer decisions.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+8. **Responsive Design**
+   - Mobile-friendly design using Bootstrap 5 for optimal viewing on all devices.
+   - Easy navigation with a clean and modern UI.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+9. **Secure Payment Integration**
+   - Integration with payment gateways for secure online transactions.
+   - Multiple payment methods supported (credit/debit cards, PayPal, etc.).
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+10. **Admin Dashboard**
+   - Admin functionality to manage products, orders, users, and reviews.
+   - Ability to update stock information, add new products, and process orders.
 
-## Learn More
+## Technologies Used
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- **Frontend:** React, HTML, Bootstrap 5
+- **Backend:** Node.js, Express.js
+- **Database:** MongoDB Atlas
+- **Authentication:** JWT (JSON Web Tokens)
+- **Libraries and Middleware:**
+  - `express`
+  - `mongoose`
+  - `cors`
+  - `dotenv`
+  - Custom routes: `userRoutes`, `productRoutes`, `categoryRoutes`, `orderRoutes`, `reviewRoutes`, `cartRoutes`, `offerRoutes`, `saleRouter`
+  - Middleware: `authenticateToken`, `notFoundHandler`, `errorHandler`
+  
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Installation
 
-### Code Splitting
+### Prerequisites
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Make sure you have the following installed:
+- Node.js and npm
+- Git
 
-### Analyzing the Bundle Size
+### Backend Setup
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+1. **Create a `.env` file** in the backend directory:
+   If you don't already have one, create a file named `.env` in your backend directory. This file will store all the necessary environment variables for your application.
 
-### Making a Progressive Web App
+2. **Add your environment variables** to the `.env` file:
+   Here's the setup for your Donicci project:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+   ```env
+   MONGODB_URI=mongodb+srv://Donicci:MERN@cluster0.zctmmxm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+   JWT_SECRET=HanenShaban12233
+   PORT=3000
+   ```
 
-### Advanced Configuration
+   - `MONGODB_URI`: This is the MongoDB connection string used for your database.
+   - `JWT_SECRET`: Your JWT secret key for token generation and authentication.
+   - `PORT`: The port number on which your backend server should run (e.g., 3000).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+**Important:** Keep the `.env` file private and avoid sharing it publicly or committing it to version control to ensure your sensitive data remains secure. 
 
-### Deployment
+### Frontend Setup
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+1. Navigate to the frontend directory:
+   ```bash
+   cd ../frontend
+   ```
 
-### `npm run build` fails to minify
+2. Install the frontend dependencies:
+   ```bash
+   npm install
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+3. Start the React development server:
+   ```bash
+   npm start
+   ```
+
+## Usage
+
+Once the application is set up, you can navigate to the following endpoints:
+
+- **Home Page:** [http://localhost:3000](http://localhost:3000)
+- **Login:** Go to `/login` to authenticate.
+- **Products:** Browse available socks at `/products`.
+
+## Project Structure
+
+```
+/backend
+    ├── models
+    ├── routes
+    ├── controllers
+    ├── middlewares
+    ├── .env
+    ├── index.js
+    └── uploads
+
+/frontend
+    ├── src
+        ├── components
+        ├── pages
+        ├── Rtk
+        └── App.js
+```
+
+## Contributing
+
+We welcome contributions to Donicci! If you'd like to contribute, follow these steps:
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature-branch-name`).
+3. Commit your changes (`git commit -am 'Add some feature'`).
+4. Push to the branch (`git push origin feature-branch-name`).
+5. Create a new Pull Request.
+
+## License
+This project does not currently have a license. If you're interested in using or contributing to this project, please contact the project owner.
+
+
