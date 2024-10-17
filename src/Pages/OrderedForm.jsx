@@ -61,7 +61,7 @@ export default function OrderedForm() {
         paymentMethod: formData.paymentMethod,
         products: cartItems.map(item => ({
           product: item.id,
-          name: item.name, // Add product name
+          name: item.name, 
           quantity: item.quantity
         })),
         totalAmount: totalWithShipping,
@@ -69,11 +69,7 @@ export default function OrderedForm() {
       });
 
       console.log('Order created successfully:', response.data);
-
-      // Clear the cart after order confirmation
       dispatch(clearCart());
-
-      // Show SweetAlert on success AFTER clearing the cart
       Swal.fire({
         icon: 'success',
         title: 'Order Confirmed!',

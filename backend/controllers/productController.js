@@ -117,24 +117,35 @@ exports.updateProduct = async (req, res) => {
             return res.status(400).json({ error: 'Invalid product ID format' });
         }
 
+        // Log request data
+        console.log('Received update request:', req.body);
+        console.log('File uploaded:', req.file);
+
         const { name, newPrice, deletedPrice, category, stock, description, offer, rate } = req.body;
         let updateData = { name, newPrice, deletedPrice, category, stock, description, offer, rate };
+
         if (req.file) {
             updateData.image = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
         }
 
+        // Perform update
         const product = await Product.findByIdAndUpdate(productId, updateData, { new: true });
 
         if (!product) {
             return res.status(404).json({ error: 'Product not found' });
         }
 
+        // Log the updated product
+        console.log('Updated product:', product);
+
         await updateProductRating(product._id);
         res.status(200).json(product);
     } catch (error) {
+        console.error('Error updating product:', error.message);
         res.status(400).json({ error: error.message });
     }
 };
+
 
 // Delete a product
 exports.deleteProduct = async (req, res) => {

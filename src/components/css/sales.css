@@ -1,9 +1,13 @@
 .sales-container {
-    padding: 20px;
+    margin: 20px;
+    font-family: 'Arial', sans-serif;
+    direction: rtl;
 }
 
 .summary {
-    margin-bottom: 20px;
+    background-color: #eef;
+    padding: 20px;
+    border-radius: 8px;
 }
 
 .sales-cards {
@@ -14,26 +18,30 @@
 
 .sale-card {
     border: 1px solid #ddd;
-    padding: 20px;
     border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .sale-card .card-header {
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px 8px 0 0;
+}
+
+.sale-card .card-body {
+    padding: 15px;
+}
+
+.pp {
     margin-bottom: 10px;
+    font-size: 14px;
+    color: #555;
 }
 
-.sale-card h3 {
-    margin: 0;
-}
-
-.sale-card p {
-    margin: 5px 0;
-}
-
-@media (max-width: 600px) {
-    .sales-cards {
-        grid-template-columns: 1fr; /* Stacks cards vertically on small screens */
-    }
+.head{
+    font-family: 'Cairo',sans-serif;
+    font-size: 24px;
+    text-align: center;
 }

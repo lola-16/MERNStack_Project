@@ -155,36 +155,66 @@ const Products = () => {
             Swal.fire('Error', 'All required fields must be filled.', 'error');
             return;
         }
-
-        const formData = new FormData();
-        Object.entries(productForm).forEach(([key, value]) => {
-            formData.append(key, value);
-        });
-
+    
+        let formData;
+        let headers = {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        };
+    
+        if (productForm.image) {
+            formData = new FormData();
+            formData.append('name', productForm.name);
+            formData.append('price', parseFloat(productForm.price));
+            formData.append('deletedPrice', parseFloat(productForm.deletedPrice));
+            formData.append('stock', parseInt(productForm.stock));
+            formData.append('description', productForm.description);
+            formData.append('category', productForm.category);
+            formData.append('image', productForm.image);
+            headers['Content-Type'] = 'multipart/form-data';  // Set content type for file upload
+        } else {
+            formData = {
+                name: productForm.name,
+                price: parseFloat(productForm.price),
+                deletedPrice: parseFloat(productForm.deletedPrice),
+                stock: parseInt(productForm.stock),
+                description: productForm.description,
+                category: productForm.category,
+            };
+            headers['Content-Type'] = 'application/json';  // JSON content type
+        }
+    
         setSubmitting(true);
-
+    
         try {
-            const token = localStorage.getItem('token');
-            const response = await axios.put(`http://localhost:8080/api/products/${currentProductId}`, formData, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-            setProducts(products.map(prod => (prod._id === currentProductId ? response.data : prod)));
+            const response = await axios.put(
+                `http://localhost:8080/api/products/${currentProductId}`,
+                formData,
+                { headers }
+            );
+    
+            setProducts(products.map((prod) => (prod._id === currentProductId ? response.data : prod)));
+    
             setIsEditing(false);
             setCurrentProductId(null);
             setProductForm(initialFormState);
-            document.getElementById('image').value = '';
-
+            document.getElementById('image').value = '';  // Clear the image input field
+    
             Swal.fire('Success', 'Product updated successfully!', 'success');
         } catch (err) {
-            Swal.fire('Error', 'Failed to update product', 'error');
-            console.error(err);
+            // Log detailed error response
+            if (err.response) {
+                console.error('Error response:', err.response.data);
+                Swal.fire('Error', `Failed to update product: ${err.response.data.error || 'Server error'}`, 'error');
+            } else {
+                console.error('Error:', err);
+                Swal.fire('Error', 'An unexpected error occurred', 'error');
+            }
         } finally {
             setSubmitting(false);
         }
     };
+    
+    
 
     const handleDeleteProduct = async (productId) => {
         Swal.fire({
@@ -316,7 +346,7 @@ const Products = () => {
                     >
                         <option value="">-- اختر الفئة --</option>
                         {categories.map(category => (
-                            <option key={category._id} value={category._id}>
+                            <option key={category.categoryId} value={category.categoryId}>
                                 {category.name}
                             </option>
                         ))}

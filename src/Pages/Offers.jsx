@@ -12,7 +12,7 @@ export default function Offer() {
     useEffect(() => {
         const fetchOffers = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/offers');
+                const response = await axios.get('http://localhost:8080/api/products/category/17');
                 console.log("Data received from API:", response.data);
                 setOffers(response.data);
                 setSortedOffers(response.data); // Set sorted offers initially
@@ -63,12 +63,12 @@ export default function Offer() {
                         key={sock._id} 
                         name={sock.name}
                         deletedPrice={sock.deletedPrice}
-                        currentPrice={sock.price}
+                        currentPrice={sock.newPrice}
                         image={sock.image}
                         id={sock._id} 
                     />
                 ))}
-            </div>
+            </div> 
         </div>
     );
 }

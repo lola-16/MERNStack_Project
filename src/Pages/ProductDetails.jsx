@@ -62,7 +62,7 @@ const ProductDetails = () => {
     };
 
     const handleStarClick = (index) => {
-        setCustomerRating(index + 1); 
+        setCustomerRating(index + 1);
     };
 
     const submitRating = async () => {
@@ -113,26 +113,18 @@ const ProductDetails = () => {
     }
 
     return (
-        <Container fluid className="mt-3">
+        <Container fluid className="mt-3 det">
             <Row className="text-center desc h-100 g-2">
                 <Col xs={12} md={6}>
-                    <img src={product.image} alt={product.name} className="img-fluid" />
+                    <div className="img-container">
+                        <img src={product.image} alt={product.name} className="img-fluid" />
+                    </div>
                 </Col>
-                <Col xs={12} md={6}>
+                <Col xs={12} md={6} className='detail'>
                     <h1 className='mb-5'>{product.name}</h1>
                     <p style={{ fontSize: 30 }} className='mb-3'>
                         {product.price} جنيها {product.deletedPrice && <del>{product.deletedPrice} جنيها</del>}
                     </p>
-                    <h2>الاحجام المتاحة</h2>
-                    <div className='sizes'>
-                        {product.sizes?.length > 0 ? (
-                            product.sizes.map((size, index) => (
-                                <span key={index} className="size">{size}</span>
-                            ))
-                        ) : (
-                            <p>لا توجد أحجام متاحة لهذا المنتج.</p>
-                        )}
-                    </div>
                     <Row className="text-center cart">
                         <Col>
                             <Button className="car-btn w-100" onClick={handleAddToCart}>اضافة لعربة التسوق</Button>

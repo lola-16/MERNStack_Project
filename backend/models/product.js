@@ -13,6 +13,7 @@ const productSchema = new mongoose.Schema({
     offer: { type: String }, // Additional field for offers
     rating: { type: Number, default: 0 },
     rate: { type: Number, default: 0 }, // Customer rating
+    
 });
 
 productSchema.plugin(AutoIncrement, { inc_field: 'productId', start_seq: 1 });

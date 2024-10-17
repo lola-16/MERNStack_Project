@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './css/sales.css'; // Make sure to create a CSS file for styles
+import './css/sales.css'; // Adjust styles in this file
 
 const Sales = () => {
     const [sales, setSales] = useState([]);
@@ -30,38 +30,38 @@ const Sales = () => {
     const totalSales = sales.length;
 
     return (
-        <div className="sales-container">
-            <h1>Sales Overview</h1>
-            <div className="summary">
-                <h2>Total Revenue: ${totalRevenue.toFixed(2)}</h2>
-                <h3>Total Sales: {totalSales}</h3>
+        <div className="sales-container" style={{ textAlign: 'center' }}>
+            <h1 className='head'>نظرة عامة على المبيعات</h1>
+            <div className="summary" style={{ marginBottom: '20px' }}>
+                <h2>إجمالي الإيرادات: ج.م{totalRevenue.toFixed(2)}</h2>
+                <h3>إجمالي المبيعات: {totalSales}</h3>
             </div>
 
             <div className="sales-cards">
                 {sales.length > 0 ? (
-                    sales.map(sale => (
+                    sales.map((sale, index) => (
                         <div className="sale-card" key={sale._id}>
-                            <div className="card-header">
-                                <h3>Order #{sale.orderId || 'N/A'}</h3>
-                                <p><strong>Total Amount:</strong> ${sale.totalAmount || 0}</p>
+                            <div className="card-header" style={{ backgroundColor: '#f0f0f0', padding: '10px', borderBottom: '1px solid #ddd' }}>
+                                <h3>الطلب رقم {index + 1}</h3> 
+                                <p><strong>إجمالي المبلغ:</strong> ج.م{sale.totalAmount || 0}</p>
                             </div>
-                            <div className="card-body">
-                                <p className='pp'><strong>Customer:</strong> {sale.name || 'N/A'}</p>
-                                <p className='pp'><strong>Email:</strong> {sale.email || 'N/A'}</p>
-                                <p className='pp'><strong>Phone:</strong> {sale.phone || 'N/A'}</p>
-                                <p className='pp'><strong>Shipping Address:</strong> {sale.address || 'N/A'}</p>
-                                <p className='pp'><strong>Order Date:</strong> {new Date(sale.orderDate).toLocaleString()}</p>
-                                <p className='pp'><strong>Payment Method:</strong> {sale.paymentMethod || 'N/A'}</p>
-                                <p className='pp'><strong>Shipping Fee:</strong> {sale.shipping || 'N/A'}</p>
-                                <p className='pp'><strong>Products:</strong> {sale.products && sale.products.length > 0 
-                                    ? sale.products.map(p => `${p.productName} (Qty: ${p.quantity})`).join(', ') 
-                                    : 'No products available'}
+                            <div className="card-body" style={{ padding: '15px' }}>
+                                <p className='pp'><strong>العميل:</strong> {sale.name || 'غير متوفر'}</p>
+                                <p className='pp'><strong>البريد الإلكتروني:</strong> {sale.email || 'غير متوفر'}</p>
+                                <p className='pp'><strong>الهاتف:</strong> {sale.phone || 'غير متوفر'}</p>
+                                <p className='pp'><strong>عنوان الشحن:</strong> {sale.address || 'غير متوفر'}</p>
+                                <p className='pp'><strong>تاريخ الطلب:</strong> {new Date(sale.orderDate).toLocaleString('ar-EG')}</p>
+                                <p className='pp'><strong>طريقة الدفع:</strong> {sale.paymentMethod || 'غير متوفر'}</p>
+                                <p className='pp'><strong>رسوم الشحن:</strong> {sale.shipping || 'غير متوفر'}</p>
+                                <p className='pp'><strong>المنتجات:</strong> {sale.products && sale.products.length > 0 
+                                    ? sale.products.map(p => `${p.productName} (الكمية: ${p.quantity})`).join(', ') 
+                                    : 'لا توجد منتجات متاحة'}
                                 </p>
                             </div>
                         </div>
                     ))
                 ) : (
-                    <p>No submitted orders available.</p>
+                    <p>لا توجد طلبات مقدمة متاحة.</p>
                 )}
             </div>
         </div>
